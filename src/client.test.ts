@@ -1,6 +1,6 @@
 import * as github from '@actions/github';
 import ActionsClient from './client';
-import { Job, WorkflowRun } from './types';
+import { Job } from './types';
 
 jest.mock('@actions/github', () => ({
   getOctokit: jest.fn(),
@@ -21,10 +21,12 @@ const mockOctokit = {
 const mockJobs = [
   {
     name: 'Job 1',
+    status: 'completed',
     conclusion: 'failure',
   },
   {
     name: 'Job 2',
+    status: 'completed',
     conclusion: 'success',
   },
 ];
@@ -40,17 +42,6 @@ const expectedJobs: Job[] = [
   },
 ];
 
-const mockWorkflowRun = {
-  name: 'My workflow',
-  conclusion: 'success',
-};
-
-const expectedWorkflowRun: WorkflowRun = {
-  name: 'My workflow',
-  result: 'success',
-  jobs: expectedJobs,
-};
-
 describe('ActionsClient', () => {
   let client: ActionsClient;
   beforeEach(() => {
@@ -58,11 +49,11 @@ describe('ActionsClient', () => {
     client = new ActionsClient('token', 'owner', 'repo');
   });
 
-  describe('getJobs', () => {
+  describe('getCompletedJobs', () => {
     it('should fetch and return jobs', async () => {
       listJobsForWorkflowRun.mockReturnValue(Promise.resolve({ data: { jobs: mockJobs } }));
 
-      const jobs = await client.getJobs(1234);
+      const jobs = await client.getCompletedJobs(1234);
 
       expect(listJobsForWorkflowRun).toHaveBeenCalledWith({
         owner: 'owner',
@@ -71,22 +62,31 @@ describe('ActionsClient', () => {
       });
       expect(jobs).toEqual(expectedJobs);
     });
-  });
 
-  describe('getWorkflowRun', () => {
-    it('should fetch and return workflow run', async () => {
-      listJobsForWorkflowRun.mockReturnValue(Promise.resolve({ data: { jobs: mockJobs } }));
-      getWorkflowRun.mockReturnValue(Promise.resolve({ data: mockWorkflowRun }));
+    it('should filter out non-completed jobs', async () => {
+      const jobsToReturn = [
+        ...mockJobs,
+        {
+          name: 'In progress',
+          conclusion: null,
+          status: 'in_progress',
+        },
+        {
+          name: 'Pending',
+          conclusion: null,
+          status: 'pending',
+        },
+      ];
+      listJobsForWorkflowRun.mockReturnValue(Promise.resolve({ data: { jobs: jobsToReturn } }));
 
-      const workflowRun = await client.getWorkflowRun(1234);
+      const jobs = await client.getCompletedJobs(1234);
 
       expect(listJobsForWorkflowRun).toHaveBeenCalledWith({
         owner: 'owner',
         repo: 'repo',
         run_id: 1234,
       });
-      expect(getWorkflowRun).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', run_id: 1234 });
-      expect(workflowRun).toEqual(expectedWorkflowRun);
+      expect(jobs).toEqual(expectedJobs);
     });
   });
 });

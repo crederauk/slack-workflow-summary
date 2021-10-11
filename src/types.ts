@@ -2,7 +2,7 @@ import { GitHub } from '@actions/github/lib/utils';
 
 export type Octokit = InstanceType<typeof GitHub>;
 
-export interface WorkflowRun {
+export interface WorkflowSummary {
   name: string;
   result: 'success' | 'failure';
   jobs: Job[];

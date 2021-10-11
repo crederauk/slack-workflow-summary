@@ -1,6 +1,10 @@
 name: 'Slack Summary'
 description: 'Posts a Slack message with a summary of the current workflow'
 author: "Lewis O'Driscoll"
+inputs:
+  github-token:
+    description: 'Actions token (secrets.GITHUB_TOKEN)'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
