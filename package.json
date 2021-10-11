@@ -1,18 +1,21 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "workflow-slack-summary",
+  "version": "0.0.1",
   "private": true,
-  "description": "TypeScript template action",
-  "main": "lib/main.js",
+  "description": "Github Action to post a summary of the current workflow to slack",
+  "main": "src/main.ts",
   "scripts": {
-    "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "pre-commit": "yarn format && git stash --keep-index -u && yarn package && git add . && git stash apply && git stash drop",
+    "all": "yarn run format && yarn run lint && yarn run package && yarn test"
   },
+  "pre-commit": [
+    "pre-commit"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/actions/typescript-action.git"
@@ -20,22 +23,26 @@
   "keywords": [
     "actions",
     "node",
-    "setup"
+    "typescript",
+    "slack"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Lewis O'Driscoll",
   "dependencies": {
-    "@actions/core": "^1.4.0"
+    "@actions/core": "^1.4.0",
+    "@actions/github": "^5.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.3.3",
     "@typescript-eslint/parser": "^4.28.3",
     "@vercel/ncc": "^0.29.0",
     "eslint": "^7.31.0",
     "eslint-plugin-github": "^4.1.1",
-    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-jest": "^25.0.4",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.0.6",
     "js-yaml": "^4.1.0",
+    "pre-commit": "^1.2.2",
     "prettier": "2.2.1",
     "ts-jest": "^27.0.3",
     "typescript": "^4.1.3"
