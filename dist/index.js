@@ -1733,10 +1733,10 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Hello, world!');
+            _actions_core__WEBPACK_IMPORTED_MODULE_0___default().info('Hello, world!');
         }
         catch (error) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(error.message);
         }
     });
 }

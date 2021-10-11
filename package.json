@@ -10,7 +10,7 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "pre-commit": "git stash --keep-index -u && yarn format && yarn package && git add . && git stash apply && git stash drop",
+    "pre-commit": "yarn format && git stash --keep-index -u && yarn package && git add . && git stash apply && git stash drop",
     "all": "yarn run format && yarn run lint && yarn run package && yarn test"
   },
   "pre-commit": [
@@ -28,9 +28,11 @@
   ],
   "author": "Lewis O'Driscoll",
   "dependencies": {
-    "@actions/core": "^1.4.0"
+    "@actions/core": "^1.4.0",
+    "@actions/github": "^5.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.3.3",
     "@typescript-eslint/parser": "^4.28.3",
     "@vercel/ncc": "^0.29.0",
