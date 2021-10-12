@@ -8526,6 +8526,77 @@ class ActionsClient {
     }
 }
 
+;// CONCATENATED MODULE: ./src/message.ts
+const SUCCESS_HEADER = 'Deployment Success :rocket:';
+const FAILURE_HEADER = 'Deployment Failed :rotating_light:';
+const DIVIDER_BLOCK = {
+    type: 'divider',
+};
+const markdownSection = (text) => ({
+    type: 'section',
+    text: {
+        type: 'mrkdwn',
+        text,
+    },
+});
+const getJobEmoji = (result) => {
+    switch (result) {
+        case 'success':
+            return ':heavy-check-mark:';
+        case 'failure':
+            return ':heavy-cross-mark:';
+        case 'skipped':
+            return ':heavy-minus-sign:';
+    }
+};
+class Message {
+    constructor(summary) {
+        this.render = () => ({
+            color: this.summary.result === 'success' ? '#009933' : '#cc0000',
+            blocks: [
+                this.renderHeader(),
+                DIVIDER_BLOCK,
+                this.renderContext(),
+                markdownSection(`*Deployment Status*: ${this.summary.result}`),
+                DIVIDER_BLOCK,
+                ...this.renderJobConclusions(),
+            ],
+        });
+        this.renderHeader = () => ({
+            type: 'header',
+            text: {
+                type: 'plain_text',
+                text: this.summary.result === 'success' ? SUCCESS_HEADER : FAILURE_HEADER,
+                emoji: true,
+            },
+        });
+        this.renderContext = () => ({
+            type: 'context',
+            elements: [
+                {
+                    type: 'mrkdwn',
+                    text: '*Workflow initiated by*:',
+                },
+                {
+                    type: 'image',
+                    image_url: `https://github.com/${this.summary.initiatedBy}.png?size=40`,
+                    alt_text: `Author's avatar`,
+                },
+                {
+                    type: 'plain_text',
+                    text: this.summary.initiatedBy,
+                },
+            ],
+        });
+        this.renderJobConclusions = () => {
+            const title = markdownSection('*Job conclusions for this workflow run*');
+            const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${getJobEmoji(job.result)}   ${job.name}`));
+            return [title, ...jobConclusions];
+        };
+        this.summary = summary;
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/summariser.ts
 var summariser_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -8540,7 +8611,7 @@ class WorkflowSummariser {
     constructor(actionsClient) {
         this.actionsClient = actionsClient;
     }
-    summariseWorkflow(workflowName, runId) {
+    summariseWorkflow(workflowName, runId, actor) {
         return summariser_awaiter(this, void 0, void 0, function* () {
             const jobs = yield this.actionsClient.getCompletedJobs(runId);
             const wasSuccessful = jobs
@@ -8548,6 +8619,7 @@ class WorkflowSummariser {
                 .reduce((workflowResult, jobResult) => workflowResult && jobResult, true);
             return {
                 name: workflowName,
+                initiatedBy: actor,
                 result: wasSuccessful ? 'success' : 'failure',
                 jobs,
             };
@@ -8569,16 +8641,18 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 
 
 
+
 function run() {
     return main_awaiter(this, void 0, void 0, function* () {
         try {
             const githubToken = core_default().getInput('github-token');
             const { owner, repo } = (github_default()).context.repo;
-            const { runId, workflow } = (github_default()).context;
+            const { runId, workflow, actor } = (github_default()).context;
             const actionsClient = new ActionsClient(githubToken, owner, repo);
             const workflowSummariser = new WorkflowSummariser(actionsClient);
-            const summary = yield workflowSummariser.summariseWorkflow(workflow, runId);
-            core_default().info(`${summary.name}: ${summary.result}`);
+            const summary = yield workflowSummariser.summariseWorkflow(workflow, runId, actor);
+            const message = new Message(summary);
+            core_default().info(JSON.stringify(message.render()));
         }
         catch (error) {
             core_default().setFailed(error.message);

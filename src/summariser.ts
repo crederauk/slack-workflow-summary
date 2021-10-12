@@ -8,7 +8,11 @@ export default class WorkflowSummariser {
     this.actionsClient = actionsClient;
   }
 
-  async summariseWorkflow(workflowName: string, runId: number): Promise<WorkflowSummary> {
+  async summariseWorkflow(
+    workflowName: string,
+    runId: number,
+    actor: string,
+  ): Promise<WorkflowSummary> {
     const jobs = await this.actionsClient.getCompletedJobs(runId);
 
     const wasSuccessful = jobs
@@ -17,6 +21,7 @@ export default class WorkflowSummariser {
 
     return {
       name: workflowName,
+      initiatedBy: actor,
       result: wasSuccessful ? 'success' : 'failure',
       jobs,
     };

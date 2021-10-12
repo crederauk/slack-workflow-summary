@@ -4,6 +4,7 @@ export type Octokit = InstanceType<typeof GitHub>;
 
 export interface WorkflowSummary {
   name: string;
+  initiatedBy: string;
   result: 'success' | 'failure';
   jobs: Job[];
 }
