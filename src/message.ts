@@ -39,51 +39,57 @@ export default class Message {
     this.summary = summary;
   }
 
-  render: () => MessageAttachment = () => ({
-    color: this.summary.result === 'success' ? '#009933' : '#cc0000',
-    blocks: [
-      this.renderHeader(),
-      DIVIDER_BLOCK,
-      this.renderContext(),
-      markdownSection(`*Deployment Status*: ${this.summary.result}`),
-      DIVIDER_BLOCK,
-      ...this.renderJobConclusions(),
-    ],
-  });
+  render(): MessageAttachment {
+    return {
+      color: this.summary.result === 'success' ? '#009933' : '#cc0000',
+      blocks: [
+        this.renderHeader(),
+        DIVIDER_BLOCK,
+        this.renderContext(),
+        markdownSection(`*Deployment Status*: ${this.summary.result}`),
+        DIVIDER_BLOCK,
+        ...this.renderJobConclusions(),
+      ],
+    };
+  }
 
-  private renderHeader: () => HeaderBlock = () => ({
-    type: 'header',
-    text: {
-      type: 'plain_text',
-      text: this.summary.result === 'success' ? SUCCESS_HEADER : FAILURE_HEADER,
-      emoji: true,
-    },
-  });
-
-  private renderContext: () => ContextBlock = () => ({
-    type: 'context',
-    elements: [
-      {
-        type: 'mrkdwn',
-        text: '*Workflow initiated by*:',
-      },
-      {
-        type: 'image',
-        image_url: `https://github.com/${this.summary.initiatedBy}.png?size=40`,
-        alt_text: `Author's avatar`,
-      },
-      {
+  private renderHeader(): HeaderBlock {
+    return {
+      type: 'header',
+      text: {
         type: 'plain_text',
-        text: this.summary.initiatedBy,
+        text: this.summary.result === 'success' ? SUCCESS_HEADER : FAILURE_HEADER,
+        emoji: true,
       },
-    ],
-  });
+    };
+  }
 
-  private renderJobConclusions: () => SectionBlock[] = () => {
+  private renderContext(): ContextBlock {
+    return {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: '*Workflow initiated by*:',
+        },
+        {
+          type: 'image',
+          image_url: `https://github.com/${this.summary.initiatedBy}.png?size=40`,
+          alt_text: `Author's avatar`,
+        },
+        {
+          type: 'plain_text',
+          text: this.summary.initiatedBy,
+        },
+      ],
+    };
+  }
+
+  private renderJobConclusions(): SectionBlock[] {
     const title = markdownSection('*Job conclusions for this workflow run*');
     const jobConclusions = this.summary.jobs.map((job) =>
       markdownSection(`${getJobEmoji(job.result)}   ${job.name}`),
     );
     return [title, ...jobConclusions];
-  };
+  }
 }
