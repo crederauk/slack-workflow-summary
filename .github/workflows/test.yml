@@ -1,24 +1,126 @@
-name: 'build-test'
-on: # rebuild any PRs and main branch changes
+name: 'Build and test'
+on:
   pull_request:
   push:
     branches:
       - main
-      - 'releases/*'
 
 jobs:
-  build: # make sure build/ci work properly
+  build_cache:
+    name: 'Build Cache'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Output cache metadata'
+        id: cache_metadata
+        run: |
+          echo "::set-output name=key::${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}"
+          echo "::set-output name=yarn_path::$(yarn config get cacheFolder)"
+          echo "::set-output name=modules_path::./node_modules"
+
+      - name: 'Check for existing yarn cache'
+        uses: actions/cache@v2
+        id: yarn_cache
         with:
-          milliseconds: 1000
+          key: ${{ steps.cache_metadata.outputs.key }}
+          path: ${{ steps.cache_metadata.outputs.yarn_path }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: 'Check for existing node_modules cache'
+        uses: actions/cache@v2
+        id: modules_cache
+        with:
+          key: ${{ steps.cache_metadata.outputs.key }}
+          path: ${{ steps.cache_metadata.outputs.modules_path }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: 'Use Node 12.x'
+        if: steps.yarn_cache.outputs.cache-hit != 'true' || steps.modules_cache.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: 'Install dependencies'
+        if: steps.yarn_cache.outputs.cache-hit != 'true' || steps.modules_cache.outputs.cache-hit != 'true'
+        run: yarn install
+
+    outputs:
+      key: ${{ steps.cache_metadata.outputs.key }}
+      yarn_path: ${{ steps.cache_metadata.outputs.yarn_path }}
+      modules_path: ${{ steps.cache_metadata.outputs.modules_path }}
+
+  test:
+    name: 'Unit tests'
+    runs-on: ubuntu-latest
+    needs: [ build_cache ]
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: "Use Node.js 12.x"
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+        
+      - name: 'Restore yarn cache'
+        uses: actions/cache@v2
+        with:
+          key: ${{ needs.build_cache.outputs.key }}
+          path: ${{ needs.build_cache.outputs.yarn_path }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: 'Restore node_modules cache'
+        uses: actions/cache@v2
+        with:
+          key: ${{ needs.build_cache.outputs.key }}
+          path: ${{ needs.build_cache.outputs.modules_path }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: 'Run tests'
+        run: yarn test
+
+  check_dist:
+    name: "Check dist"
+    runs-on: ubuntu-latest
+    needs: [ build_cache ]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2
+
+      - name: "Use Node.js 12.x"
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: "Get yarn cache"
+        uses: actions/cache@v2
+        with:
+          key: ${{ needs.build_cache.outputs.key }}
+          path: ${{ needs.build_cache.outputs.yarn_path }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: "Get node modules cache"
+        uses: actions/cache@v2
+        with:
+          key: ${{ needs.build_cache.outputs.key }}
+          path: ${{ needs.build_cache.outputs.modules_path }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: "Build dist"
+        run: yarn package
+
+      - name: "Detect uncommitted changes"
+        run: |
+          if [[ "$( git diff --name-only | grep dist )" != "" ]]; then
+            echo "::error file={dist/index.js},title={Uncompiled Source}::Detected changes in dist/ directory after running 'yarn package'.\nPlease run 'yarn package' and commit the results."
+            exit 1
+          fi
+          exit 0
