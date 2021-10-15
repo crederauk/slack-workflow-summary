@@ -5,7 +5,7 @@ import { Job } from './types';
 const MockClient = jest.fn(() => ({
   getCompletedJobs: jest.fn(),
 }));
-const mockedClient = (new MockClient() as unknown) as ActionsClient;
+const mockedClient = new MockClient() as unknown as ActionsClient;
 
 const WORKFLOW_NAME = 'My workflow';
 const RUN_ID = 1234;
