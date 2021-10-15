@@ -12655,7 +12655,10 @@ const getJobEmoji = (result) => {
 };
 class Message {
     constructor(summary) {
-        this.render = () => ({
+        this.summary = summary;
+    }
+    render() {
+        return {
             color: this.summary.result === 'success' ? '#009933' : '#cc0000',
             blocks: [
                 this.renderHeader(),
@@ -12665,16 +12668,20 @@ class Message {
                 DIVIDER_BLOCK,
                 ...this.renderJobConclusions(),
             ],
-        });
-        this.renderHeader = () => ({
+        };
+    }
+    renderHeader() {
+        return {
             type: 'header',
             text: {
                 type: 'plain_text',
                 text: this.summary.result === 'success' ? SUCCESS_HEADER : FAILURE_HEADER,
                 emoji: true,
             },
-        });
-        this.renderContext = () => ({
+        };
+    }
+    renderContext() {
+        return {
             type: 'context',
             elements: [
                 {
@@ -12691,13 +12698,12 @@ class Message {
                     text: this.summary.initiatedBy,
                 },
             ],
-        });
-        this.renderJobConclusions = () => {
-            const title = markdownSection('*Job conclusions for this workflow run*');
-            const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${getJobEmoji(job.result)}   ${job.name}`));
-            return [title, ...jobConclusions];
         };
-        this.summary = summary;
+    }
+    renderJobConclusions() {
+        const title = markdownSection('*Job conclusions for this workflow run*');
+        const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${getJobEmoji(job.result)}   ${job.name}`));
+        return [title, ...jobConclusions];
     }
 }
 exports.default = Message;
