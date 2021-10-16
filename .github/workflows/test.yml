@@ -121,7 +121,6 @@ jobs:
       - name: 'Lint'
         run: yarn lint
 
-
   check_dist:
     name: 'Check dist'
     runs-on: ubuntu-latest
@@ -160,3 +159,20 @@ jobs:
             echo "::error file=dist/index.js,title=Uncompiled Source::Detected changes in dist/ directory after running 'yarn package'. Please run 'yarn package' and commit the results."
             exit 1
           fi
+
+  slack_summary:
+    name: 'Post summary to Slack'
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - lint_and_format
+      - check_dist
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Post summary'
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
