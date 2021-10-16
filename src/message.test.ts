@@ -1,6 +1,12 @@
 import { MessageAttachment } from '@slack/types';
 import Message from './message';
-import { WorkflowSummary } from './types';
+import { SummaryEmojis, WorkflowSummary } from './types';
+
+const emojis: SummaryEmojis = {
+  success: ':heavy-check-mark:',
+  skipped: ':heavy-minus-sign:',
+  failure: ':heavy-cross-mark:',
+};
 
 const workflowSummary: WorkflowSummary = {
   name: 'My Workflow',
@@ -75,28 +81,28 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: ':heavy-check-mark:   Job 1',
+        text: `${emojis.success}   Job 1`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: ':heavy-minus-sign:   Job 2',
+        text: `${emojis.skipped}   Job 2`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: ':heavy-cross-mark:   Job 3',
+        text: `${emojis.failure}   Job 3`,
       },
     },
   ],
 };
 
 describe('Message', () => {
-  const message = new Message(workflowSummary);
+  const message = new Message(workflowSummary, emojis);
 
   it('renders the Slack message attachment correctly', () => {
     const actualMessageAttachment = message.render();

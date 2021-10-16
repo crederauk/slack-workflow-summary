@@ -5,7 +5,7 @@ import {
   MessageAttachment,
   SectionBlock,
 } from '@slack/types';
-import { JobResult, WorkflowSummary } from './types';
+import { JobResult, SummaryEmojis, WorkflowSummary } from './types';
 
 const SUCCESS_HEADER = 'Deployment Success :rocket:';
 const FAILURE_HEADER = 'Deployment Failed :rotating_light:';
@@ -21,22 +21,13 @@ const markdownSection: (text: string) => SectionBlock = (text) => ({
   },
 });
 
-const getJobEmoji: (result: JobResult) => string = (result) => {
-  switch (result) {
-    case 'success':
-      return ':heavy-check-mark:';
-    case 'failure':
-      return ':heavy-cross-mark:';
-    case 'skipped':
-      return ':heavy-minus-sign:';
-  }
-};
-
 export default class Message {
   private readonly summary: WorkflowSummary;
+  private readonly emojis: SummaryEmojis;
 
-  constructor(summary: WorkflowSummary) {
+  constructor(summary: WorkflowSummary, emojis: SummaryEmojis) {
     this.summary = summary;
+    this.emojis = emojis;
   }
 
   render(): MessageAttachment {
@@ -88,7 +79,7 @@ export default class Message {
   private renderJobConclusions(): SectionBlock[] {
     const title = markdownSection('*Job conclusions for this workflow run*');
     const jobConclusions = this.summary.jobs.map((job) =>
-      markdownSection(`${getJobEmoji(job.result)}   ${job.name}`),
+      markdownSection(`${this.emojis[job.result]}   ${job.name}`),
     );
     return [title, ...jobConclusions];
   }

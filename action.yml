@@ -8,6 +8,18 @@ inputs:
   slack-webhook-url:
     description: 'Slack webhook URL for sending messages'
     required: true
+  success-emoji:
+    description: 'Emoji to use to indicate a job was successful'
+    required: false
+    default: ':white_check_mark:'
+  skipped-emoji:
+    description: 'Emoji to use to indicate a job was skipped'
+    required: false
+    default: ':heavy_minus_sign:'
+  failed-emoji:
+    description: 'Emoji to use to indicate a job failed'
+    required: false
+    default: ':x:'
 runs:
   using: 'node12'
   main: 'dist/index.js'

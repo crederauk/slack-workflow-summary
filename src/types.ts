@@ -9,9 +9,15 @@ export interface WorkflowSummary {
   jobs: Job[];
 }
 
-export type JobResult = 'success' | 'skipped' | 'failure';
-
 export interface Job {
   name: string;
   result: JobResult;
+}
+
+export type JobResult = 'success' | 'skipped' | 'failure';
+
+export interface SummaryEmojis {
+  success: string;
+  skipped: string;
+  failure: string;
 }

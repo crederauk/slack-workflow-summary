@@ -12640,13 +12640,18 @@ function run() {
         try {
             const githubToken = core.getInput('github-token');
             const webhookUrl = core.getInput('slack-webhook-url');
+            const emojis = {
+                success: core.getInput('success-emoji'),
+                skipped: core.getInput('skipped-emoji'),
+                failure: core.getInput('failed-emoji'),
+            };
             const { owner, repo } = github.context.repo;
             const { runId, workflow, actor } = github.context;
             const actionsClient = new client_1.default(githubToken, owner, repo);
             const workflowSummariser = new summariser_1.default(actionsClient);
             const client = new slackClient_1.default(webhookUrl);
             const summary = yield workflowSummariser.summariseWorkflow(workflow, runId, actor);
-            const message = new message_1.default(summary);
+            const message = new message_1.default(summary, emojis);
             const result = yield client.sendMessage(message);
             core.info(`Sent Slack message: ${result}`);
         }
@@ -12678,19 +12683,10 @@ const markdownSection = (text) => ({
         text,
     },
 });
-const getJobEmoji = (result) => {
-    switch (result) {
-        case 'success':
-            return ':heavy-check-mark:';
-        case 'failure':
-            return ':heavy-cross-mark:';
-        case 'skipped':
-            return ':heavy-minus-sign:';
-    }
-};
 class Message {
-    constructor(summary) {
+    constructor(summary, emojis) {
         this.summary = summary;
+        this.emojis = emojis;
     }
     render() {
         return {
@@ -12737,7 +12733,7 @@ class Message {
     }
     renderJobConclusions() {
         const title = markdownSection('*Job conclusions for this workflow run*');
-        const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${getJobEmoji(job.result)}   ${job.name}`));
+        const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${this.emojis[job.result]}   ${job.name}`));
         return [title, ...jobConclusions];
     }
 }
