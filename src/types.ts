@@ -16,8 +16,6 @@ export interface Job {
 
 export type JobResult = 'success' | 'skipped' | 'failure';
 
-export interface SummaryEmojis {
-  success: string;
-  skipped: string;
-  failure: string;
-}
+export type SummaryEmojis = {
+  [key in JobResult]: string;
+};

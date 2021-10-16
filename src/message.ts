@@ -5,7 +5,7 @@ import {
   MessageAttachment,
   SectionBlock,
 } from '@slack/types';
-import { JobResult, SummaryEmojis, WorkflowSummary } from './types';
+import { SummaryEmojis, WorkflowSummary } from './types';
 
 const SUCCESS_HEADER = 'Deployment Success :rocket:';
 const FAILURE_HEADER = 'Deployment Failed :rotating_light:';
