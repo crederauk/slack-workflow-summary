@@ -108,7 +108,7 @@ const expectedMessageAttachment: MessageAttachment = {
       elements: [
         {
           type: 'mrkdwn',
-          text: ':airplane_arriving: Posted on Saturday, October 16, 2021 at 01:02:03',
+          text: ':airplane_arriving: Posted on Saturday, 16 October 2021 at 01:02:03',
         },
       ],
     },
