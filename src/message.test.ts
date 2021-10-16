@@ -1,4 +1,4 @@
-import { MessageAttachment } from '@slack/types';
+import { KnownBlock, MessageAttachment } from '@slack/types';
 import Message from './message';
 import { SummaryEmojis, WorkflowSummary } from './types';
 
@@ -81,31 +81,51 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.success} Job 1`,
+        text: `${emojis.success}  Job 1`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.skipped} Job 2`,
+        text: `${emojis.skipped}  Job 2`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.failure} Job 3`,
+        text: `${emojis.failure}  Job 3`,
       },
     },
   ],
 };
 
 describe('Message', () => {
-  const message = new Message(workflowSummary, emojis);
-
   it('renders the Slack message attachment correctly', () => {
+    const message = new Message(workflowSummary, emojis);
     const actualMessageAttachment = message.render();
     expect(actualMessageAttachment).toEqual(expectedMessageAttachment);
+  });
+
+  it('includes custom footer blocks in message attachment', () => {
+    const customBlocks: KnownBlock[] = [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: '*Useful link for this workflow run.*',
+        },
+      },
+    ];
+    const message = new Message(workflowSummary, emojis, customBlocks);
+
+    const messageAttachment = message.render();
+    const blocks = messageAttachment.blocks!;
+
+    const lastBlock = blocks[blocks.length - 1];
+    expect(lastBlock).toEqual(customBlocks[0]);
+    const penultimateBlock = blocks[blocks.length - 2];
+    expect(penultimateBlock.type).toEqual('divider');
   });
 });

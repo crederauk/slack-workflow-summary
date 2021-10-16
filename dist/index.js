@@ -12684,11 +12684,13 @@ const markdownSection = (text) => ({
     },
 });
 class Message {
-    constructor(summary, emojis) {
+    constructor(summary, emojis, footerBlocks) {
         this.summary = summary;
         this.emojis = emojis;
+        this.footerBlocks = footerBlocks;
     }
     render() {
+        const footer = this.footerBlocks ? [DIVIDER_BLOCK, ...this.footerBlocks] : [];
         return {
             color: this.summary.result === 'success' ? '#009933' : '#cc0000',
             blocks: [
@@ -12698,6 +12700,7 @@ class Message {
                 markdownSection(`*Deployment Status*: ${this.summary.result}`),
                 DIVIDER_BLOCK,
                 ...this.renderJobConclusions(),
+                ...footer,
             ],
         };
     }
@@ -12733,7 +12736,7 @@ class Message {
     }
     renderJobConclusions() {
         const title = markdownSection('*Job conclusions for this workflow run*');
-        const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${this.emojis[job.result]} ${job.name}`));
+        const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${this.emojis[job.result]}  ${job.name}`));
         return [title, ...jobConclusions];
     }
 }
