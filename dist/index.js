@@ -12733,7 +12733,7 @@ class Message {
     }
     renderJobConclusions() {
         const title = markdownSection('*Job conclusions for this workflow run*');
-        const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${this.emojis[job.result]}   ${job.name}`));
+        const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${this.emojis[job.result]} ${job.name}`));
         return [title, ...jobConclusions];
     }
 }

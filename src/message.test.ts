@@ -81,21 +81,21 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.success}   Job 1`,
+        text: `${emojis.success} Job 1`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.skipped}   Job 2`,
+        text: `${emojis.skipped} Job 2`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.failure}   Job 3`,
+        text: `${emojis.failure} Job 3`,
       },
     },
   ],

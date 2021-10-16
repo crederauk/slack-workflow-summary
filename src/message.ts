@@ -79,7 +79,7 @@ export default class Message {
   private renderJobConclusions(): SectionBlock[] {
     const title = markdownSection('*Job conclusions for this workflow run*');
     const jobConclusions = this.summary.jobs.map((job) =>
-      markdownSection(`${this.emojis[job.result]}   ${job.name}`),
+      markdownSection(`${this.emojis[job.result]} ${job.name}`),
     );
     return [title, ...jobConclusions];
   }
