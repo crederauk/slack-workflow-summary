@@ -157,7 +157,6 @@ jobs:
       - name: 'Detect uncommitted changes'
         run: |
           if [[ "$( git diff --name-only | grep dist )" != "" ]]; then
-            echo "::error file={dist/index.js},title={Uncompiled Source}::Detected changes in dist/ directory after running 'yarn package'.\nPlease run 'yarn package' and commit the results."
+            echo "::error file=dist/index.js,title=Uncompiled Source::Detected changes in dist/ directory after running 'yarn package'. Please run 'yarn package' and commit the results."
             exit 1
           fi
-          exit 0
