@@ -27,7 +27,7 @@ The emoji used to indicate a failed job.
 
 Default: `:x:` ❌
 
-### `custom-block`
+### `custom-blocks`
 Custom message blocks to include in the message, after the job summary. Should be an array of
 [Slack blocks] in JSON format.
 
