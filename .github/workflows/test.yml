@@ -163,14 +163,12 @@ jobs:
   slack_summary:
     name: 'Post summary to Slack'
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' # Only run on main
     needs:
       - test
       - lint_and_format
       - check_dist
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v2
-
       - name: 'Post summary'
         uses: ./
         with:
