@@ -1,5 +1,5 @@
 import { getInput, info, setFailed } from '@actions/core';
-import github from '@actions/github';
+import * as github from '@actions/github';
 import ActionsClient from './client';
 import Message from './message';
 import SlackClient from './slackClient';
