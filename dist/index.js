@@ -12751,13 +12751,13 @@ class Message {
         return [title, ...jobConclusions];
     }
     renderTimestamp() {
-        const date = this.timestamp.toLocaleDateString('en-GB', {
+        const date = this.timestamp.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric',
         });
-        const time = this.timestamp.toLocaleTimeString('en-GB');
+        const time = this.timestamp.toLocaleTimeString('en-US');
         return {
             type: 'context',
             elements: [
