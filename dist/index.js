@@ -12535,6 +12535,25 @@ function wrappy (fn, cb) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -12544,14 +12563,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const github_1 = __importDefault(__nccwpck_require__(5438));
+const github = __importStar(__nccwpck_require__(5438));
 class ActionsClient {
     constructor(token, owner, repo) {
-        this.octokit = github_1.default.getOctokit(token);
+        this.octokit = github.getOctokit(token);
         this.owner = owner;
         this.repo = repo;
     }
@@ -12613,7 +12629,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __nccwpck_require__(2186);
+const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const client_1 = __importDefault(__nccwpck_require__(4970));
 const message_1 = __importDefault(__nccwpck_require__(7899));
@@ -12622,8 +12638,8 @@ const summariser_1 = __importDefault(__nccwpck_require__(2553));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const githubToken = (0, core_1.getInput)('github-token');
-            const webhookUrl = (0, core_1.getInput)('slack-webhook-url');
+            const githubToken = core.getInput('github-token');
+            const webhookUrl = core.getInput('slack-webhook-url');
             const { owner, repo } = github.context.repo;
             const { runId, workflow, actor } = github.context;
             const actionsClient = new client_1.default(githubToken, owner, repo);
@@ -12632,10 +12648,10 @@ function run() {
             const summary = yield workflowSummariser.summariseWorkflow(workflow, runId, actor);
             const message = new message_1.default(summary);
             const result = yield client.sendMessage(message);
-            (0, core_1.info)(`Sent Slack message: ${result}`);
+            core.info(`Sent Slack message: ${result}`);
         }
         catch (error) {
-            (0, core_1.setFailed)(error.message);
+            core.setFailed(error.message);
         }
     });
 }

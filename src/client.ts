@@ -1,4 +1,4 @@
-import github from '@actions/github';
+import * as github from '@actions/github';
 import { Job, JobResult, Octokit } from './types';
 
 export default class ActionsClient {
