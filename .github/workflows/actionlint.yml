@@ -1,0 +1,19 @@
+name: 'Lint workflows'
+on:
+  push:
+    paths:
+      - '.github/workflows/*'
+jobs:
+  lint_workflows:
+    name: 'Run actionlint'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Install & run actionlint'
+        shell: bash
+        run: |
+          echo "::add-matcher::.github/actionlint-matcher.json"
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          ./actionlint -color
