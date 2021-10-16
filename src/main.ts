@@ -4,11 +4,17 @@ import ActionsClient from './client';
 import Message from './message';
 import SlackClient from './slackClient';
 import WorkflowSummariser from './summariser';
+import { SummaryEmojis } from './types';
 
 async function run(): Promise<void> {
   try {
     const githubToken = core.getInput('github-token');
     const webhookUrl = core.getInput('slack-webhook-url');
+    const emojis: SummaryEmojis = {
+      success: core.getInput('success-emoji'),
+      skipped: core.getInput('skipped-emoji'),
+      failure: core.getInput('failed-emoji'),
+    };
     const { owner, repo } = github.context.repo;
     const { runId, workflow, actor } = github.context;
 
@@ -17,7 +23,7 @@ async function run(): Promise<void> {
     const client = new SlackClient(webhookUrl);
 
     const summary = await workflowSummariser.summariseWorkflow(workflow, runId, actor);
-    const message = new Message(summary);
+    const message = new Message(summary, emojis);
 
     const result = await client.sendMessage(message);
     core.info(`Sent Slack message: ${result}`);
