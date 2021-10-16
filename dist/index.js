@@ -12594,7 +12594,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(2186));
+const core_1 = __nccwpck_require__(2186);
 const github_1 = __importDefault(__nccwpck_require__(5438));
 const client_1 = __importDefault(__nccwpck_require__(4970));
 const message_1 = __importDefault(__nccwpck_require__(7899));
@@ -12603,8 +12603,8 @@ const summariser_1 = __importDefault(__nccwpck_require__(2553));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const githubToken = core_1.default.getInput('github-token');
-            const webhookUrl = core_1.default.getInput('slack-webhook-url');
+            const githubToken = (0, core_1.getInput)('github-token');
+            const webhookUrl = (0, core_1.getInput)('slack-webhook-url');
             const { owner, repo } = github_1.default.context.repo;
             const { runId, workflow, actor } = github_1.default.context;
             const actionsClient = new client_1.default(githubToken, owner, repo);
@@ -12613,10 +12613,10 @@ function run() {
             const summary = yield workflowSummariser.summariseWorkflow(workflow, runId, actor);
             const message = new message_1.default(summary);
             const result = yield client.sendMessage(message);
-            core_1.default.info(`Sent Slack message: ${result}`);
+            (0, core_1.info)(`Sent Slack message: ${result}`);
         }
         catch (error) {
-            core_1.default.setFailed(error.message);
+            (0, core_1.setFailed)(error.message);
         }
     });
 }

@@ -1,4 +1,4 @@
-import core from '@actions/core';
+import { getInput, info, setFailed } from '@actions/core';
 import github from '@actions/github';
 import ActionsClient from './client';
 import Message from './message';
@@ -7,8 +7,8 @@ import WorkflowSummariser from './summariser';
 
 async function run(): Promise<void> {
   try {
-    const githubToken = core.getInput('github-token');
-    const webhookUrl = core.getInput('slack-webhook-url');
+    const githubToken = getInput('github-token');
+    const webhookUrl = getInput('slack-webhook-url');
     const { owner, repo } = github.context.repo;
     const { runId, workflow, actor } = github.context;
 
@@ -20,9 +20,9 @@ async function run(): Promise<void> {
     const message = new Message(summary);
 
     const result = await client.sendMessage(message);
-    core.info(`Sent Slack message: ${result}`);
+    info(`Sent Slack message: ${result}`);
   } catch (error) {
-    core.setFailed(error.message);
+    setFailed(error.message);
   }
 }
 
