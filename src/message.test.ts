@@ -1,4 +1,4 @@
-import { MessageAttachment } from '@slack/types';
+import { KnownBlock, MessageAttachment } from '@slack/types';
 import Message from './message';
 import { SummaryEmojis, WorkflowSummary } from './types';
 
@@ -27,6 +27,8 @@ const workflowSummary: WorkflowSummary = {
     },
   ],
 };
+
+const now = new Date(2021, 9, 16, 1, 2, 3);
 
 const expectedMessageAttachment: MessageAttachment = {
   color: '#009933',
@@ -81,31 +83,63 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.success} Job 1`,
+        text: `${emojis.success}  Job 1`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.skipped} Job 2`,
+        text: `${emojis.skipped}  Job 2`,
       },
     },
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.failure} Job 3`,
+        text: `${emojis.failure}  Job 3`,
       },
+    },
+    {
+      type: 'divider',
+    },
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: ':airplane_arriving: Posted on Saturday, October 16, 2021 at 1:02:03 AM',
+        },
+      ],
     },
   ],
 };
 
 describe('Message', () => {
-  const message = new Message(workflowSummary, emojis);
-
   it('renders the Slack message attachment correctly', () => {
+    const message = new Message(workflowSummary, emojis, undefined, now);
     const actualMessageAttachment = message.render();
     expect(actualMessageAttachment).toEqual(expectedMessageAttachment);
+  });
+
+  it('includes custom footer blocks in message attachment', () => {
+    const customBlocks: KnownBlock[] = [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: '*Useful link for this workflow run.*',
+        },
+      },
+    ];
+    const message = new Message(workflowSummary, emojis, customBlocks);
+
+    const messageAttachment = message.render();
+    const blocks = messageAttachment.blocks!;
+
+    const customBlock = blocks[blocks.length - 3];
+    expect(customBlock).toEqual(customBlocks[0]);
+    const divider = blocks[blocks.length - 4];
+    expect(divider.type).toEqual('divider');
   });
 });

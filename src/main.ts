@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import { Block } from '@slack/types';
 import ActionsClient from './client';
 import Message from './message';
 import SlackClient from './slackClient';
@@ -15,6 +16,7 @@ async function run(): Promise<void> {
       skipped: core.getInput('skipped-emoji'),
       failure: core.getInput('failed-emoji'),
     };
+    const customBlocks = parseCustomBlocks();
     const { owner, repo } = github.context.repo;
     const { runId, workflow, actor } = github.context;
 
@@ -23,7 +25,7 @@ async function run(): Promise<void> {
     const client = new SlackClient(webhookUrl);
 
     const summary = await workflowSummariser.summariseWorkflow(workflow, runId, actor);
-    const message = new Message(summary, emojis);
+    const message = new Message(summary, emojis, customBlocks);
 
     const result = await client.sendMessage(message);
     core.info(`Sent Slack message: ${result}`);
@@ -31,5 +33,14 @@ async function run(): Promise<void> {
     core.setFailed(error.message);
   }
 }
+
+const parseCustomBlocks = () => {
+  const customBlocksString = core.getInput('custom-blocks');
+  if (customBlocksString === '') {
+    return undefined;
+  }
+
+  return JSON.parse(customBlocksString) as Block[];
+};
 
 run();

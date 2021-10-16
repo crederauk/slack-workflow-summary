@@ -20,6 +20,10 @@ inputs:
     description: 'Emoji to use to indicate a job failed'
     required: false
     default: ':x:'
+  custom-blocks:
+    description: 'Custom blocks to insert into the Slack message after the job summaries. Should be a JSON array'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'

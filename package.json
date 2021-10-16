@@ -10,7 +10,7 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "pre-commit": "yarn format && yarn package && git add dist/",
+    "pre-commit": "yarn format && yarn package && git diff --name-only | xargs git add",
     "all": "yarn format && yarn lint && yarn package && yarn test"
   },
   "pre-commit": [
