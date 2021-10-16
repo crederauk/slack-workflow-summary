@@ -12684,10 +12684,11 @@ const markdownSection = (text) => ({
     },
 });
 class Message {
-    constructor(summary, emojis, footerBlocks) {
+    constructor(summary, emojis, footerBlocks, timestamp) {
         this.summary = summary;
         this.emojis = emojis;
         this.footerBlocks = footerBlocks;
+        this.timestamp = timestamp !== null && timestamp !== void 0 ? timestamp : new Date();
     }
     render() {
         const footer = this.footerBlocks ? [DIVIDER_BLOCK, ...this.footerBlocks] : [];
@@ -12701,6 +12702,8 @@ class Message {
                 DIVIDER_BLOCK,
                 ...this.renderJobConclusions(),
                 ...footer,
+                DIVIDER_BLOCK,
+                this.renderTimestamp(),
             ],
         };
     }
@@ -12738,6 +12741,24 @@ class Message {
         const title = markdownSection('*Job conclusions for this workflow run*');
         const jobConclusions = this.summary.jobs.map((job) => markdownSection(`${this.emojis[job.result]}  ${job.name}`));
         return [title, ...jobConclusions];
+    }
+    renderTimestamp() {
+        const date = this.timestamp.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+        const time = this.timestamp.toLocaleTimeString();
+        return {
+            type: 'context',
+            elements: [
+                {
+                    type: 'mrkdwn',
+                    text: `:airplane_arriving: Posted on ${date} at ${time}`,
+                },
+            ],
+        };
     }
 }
 exports.default = Message;

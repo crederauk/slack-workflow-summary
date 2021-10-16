@@ -29,11 +29,18 @@ export default class Message {
   private readonly summary: WorkflowSummary;
   private readonly emojis: SummaryEmojis;
   private readonly footerBlocks?: CustomBlock[];
+  private readonly timestamp: Date;
 
-  constructor(summary: WorkflowSummary, emojis: SummaryEmojis, footerBlocks?: CustomBlock[]) {
+  constructor(
+    summary: WorkflowSummary,
+    emojis: SummaryEmojis,
+    footerBlocks?: CustomBlock[],
+    timestamp?: Date,
+  ) {
     this.summary = summary;
     this.emojis = emojis;
     this.footerBlocks = footerBlocks;
+    this.timestamp = timestamp ?? new Date();
   }
 
   render(): MessageAttachment {
@@ -48,6 +55,8 @@ export default class Message {
         DIVIDER_BLOCK,
         ...this.renderJobConclusions(),
         ...footer,
+        DIVIDER_BLOCK,
+        this.renderTimestamp(),
       ],
     };
   }
@@ -90,5 +99,24 @@ export default class Message {
       markdownSection(`${this.emojis[job.result]}  ${job.name}`),
     );
     return [title, ...jobConclusions];
+  }
+
+  private renderTimestamp(): ContextBlock {
+    const date = this.timestamp.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    const time = this.timestamp.toLocaleTimeString();
+    return {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: `:airplane_arriving: Posted on ${date} at ${time}`,
+        },
+      ],
+    };
   }
 }

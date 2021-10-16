@@ -28,6 +28,8 @@ const workflowSummary: WorkflowSummary = {
   ],
 };
 
+const now = new Date(2021, 9, 16, 1, 2, 3);
+
 const expectedMessageAttachment: MessageAttachment = {
   color: '#009933',
   blocks: [
@@ -98,12 +100,24 @@ const expectedMessageAttachment: MessageAttachment = {
         text: `${emojis.failure}  Job 3`,
       },
     },
+    {
+      type: 'divider',
+    },
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: ':airplane_arriving: Posted on Saturday, October 16, 2021 at 01:02:03',
+        },
+      ],
+    },
   ],
 };
 
 describe('Message', () => {
   it('renders the Slack message attachment correctly', () => {
-    const message = new Message(workflowSummary, emojis);
+    const message = new Message(workflowSummary, emojis, undefined, now);
     const actualMessageAttachment = message.render();
     expect(actualMessageAttachment).toEqual(expectedMessageAttachment);
   });
@@ -123,9 +137,9 @@ describe('Message', () => {
     const messageAttachment = message.render();
     const blocks = messageAttachment.blocks!;
 
-    const lastBlock = blocks[blocks.length - 1];
-    expect(lastBlock).toEqual(customBlocks[0]);
-    const penultimateBlock = blocks[blocks.length - 2];
-    expect(penultimateBlock.type).toEqual('divider');
+    const customBlock = blocks[blocks.length - 3];
+    expect(customBlock).toEqual(customBlocks[0]);
+    const divider = blocks[blocks.length - 4];
+    expect(divider.type).toEqual('divider');
   });
 });
