@@ -11,9 +11,11 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v2
 
-      - name: 'Install & run actionlint'
-        shell: bash
-        run: |
-          echo "::add-matcher::.github/actionlint-matcher.json"
-          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-          ./actionlint -color
+      - name: 'Add problem matcher'
+        run: echo "::add-matcher::.github/actionlint-matcher.json"
+
+      - name: 'Install actionlint'
+        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+
+      - name: 'Run actionlint'
+        run: ./actionlint -color
