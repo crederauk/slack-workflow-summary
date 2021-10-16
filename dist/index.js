@@ -12645,13 +12645,14 @@ function run() {
                 skipped: core.getInput('skipped-emoji'),
                 failure: core.getInput('failed-emoji'),
             };
+            const customBlocks = parseCustomBlocks();
             const { owner, repo } = github.context.repo;
             const { runId, workflow, actor } = github.context;
             const actionsClient = new client_1.default(githubToken, owner, repo);
             const workflowSummariser = new summariser_1.default(actionsClient);
             const client = new slackClient_1.default(webhookUrl);
             const summary = yield workflowSummariser.summariseWorkflow(workflow, runId, actor);
-            const message = new message_1.default(summary, emojis);
+            const message = new message_1.default(summary, emojis, customBlocks);
             const result = yield client.sendMessage(message);
             core.info(`Sent Slack message: ${result}`);
         }
@@ -12660,6 +12661,13 @@ function run() {
         }
     });
 }
+const parseCustomBlocks = () => {
+    const customBlocksString = core.getInput('custom-blocks');
+    if (customBlocksString === '') {
+        return undefined;
+    }
+    return JSON.parse(customBlocksString);
+};
 run();
 
 
