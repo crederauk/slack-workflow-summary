@@ -12707,7 +12707,7 @@ class Message {
             blocks: [
                 this.renderHeader(),
                 DIVIDER_BLOCK,
-                markdownSection(`*Workflow name*: ${this.summary.name}`),
+                this.renderWorkflowName(),
                 this.renderInitiatedBy(),
                 markdownSection(`*Deployment Status*: ${this.emojis[this.summary.result]} ${capitalize(this.summary.result)}`),
                 DIVIDER_BLOCK,
@@ -12726,6 +12726,17 @@ class Message {
                 text: this.summary.result === 'success' ? SUCCESS_HEADER : FAILURE_HEADER,
                 emoji: true,
             },
+        };
+    }
+    renderWorkflowName() {
+        return {
+            type: 'context',
+            elements: [
+                {
+                    type: 'mrkdwn',
+                    text: `*Workflow name*: ${this.summary.name}`,
+                },
+            ],
         };
     }
     renderInitiatedBy() {
