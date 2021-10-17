@@ -54,6 +54,15 @@ const expectedMessageAttachment: MessageAttachment = {
       elements: [
         {
           type: 'mrkdwn',
+          text: '*Workflow name*: My Workflow',
+        },
+      ],
+    },
+    {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
           text: '*Workflow initiated by*:',
         },
         {

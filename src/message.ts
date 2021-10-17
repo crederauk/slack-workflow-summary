@@ -52,7 +52,8 @@ export default class Message {
       blocks: [
         this.renderHeader(),
         DIVIDER_BLOCK,
-        this.renderContext(),
+        this.renderWorkflowName(),
+        this.renderInitiatedBy(),
         markdownSection(
           `*Deployment Status*: ${this.emojis[this.summary.result]} ${capitalize(
             this.summary.result,
@@ -78,7 +79,19 @@ export default class Message {
     };
   }
 
-  private renderContext(): ContextBlock {
+  private renderWorkflowName(): ContextBlock {
+    return {
+      type: 'context',
+      elements: [
+        {
+          type: 'mrkdwn',
+          text: `*Workflow name*: ${this.summary.name}`,
+        },
+      ],
+    };
+  }
+
+  private renderInitiatedBy(): ContextBlock {
     return {
       type: 'context',
       elements: [
