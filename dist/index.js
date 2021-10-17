@@ -12643,6 +12643,7 @@ function run() {
             const emojis = {
                 success: core.getInput('success-emoji'),
                 skipped: core.getInput('skipped-emoji'),
+                cancelled: core.getInput('cancelled-emoji'),
                 failure: core.getInput('failed-emoji'),
             };
             const customBlocks = parseCustomBlocks();

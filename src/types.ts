@@ -14,7 +14,7 @@ export interface Job {
   result: JobResult;
 }
 
-export type JobResult = 'success' | 'skipped' | 'failure';
+export type JobResult = 'success' | 'skipped' | 'cancelled' | 'failure';
 
 export type SummaryEmojis = {
   [key in JobResult]: string;
