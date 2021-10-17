@@ -1,6 +1,9 @@
 name: 'Slack Summary'
 description: 'Posts a Slack message with a summary of the current workflow'
 author: "Lewis O'Driscoll"
+branding:
+  icon: 'message-square'
+  color: 'orange'
 inputs:
   github-token:
     description: 'Actions token (secrets.GITHUB_TOKEN)'
