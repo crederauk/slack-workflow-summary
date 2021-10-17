@@ -50,6 +50,13 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'divider',
     },
     {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: '*Workflow name*: My Workflow',
+      },
+    },
+    {
       type: 'context',
       elements: [
         {
