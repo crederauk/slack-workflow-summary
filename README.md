@@ -34,11 +34,22 @@ Default: `:x:` ❌
 
 ### `custom-blocks`
 Custom message blocks to include in the message, after the job summary. Should be an array of
-[Slack blocks] in JSON format.
+[Slack blocks] in JSON format, e.g.:
+```json
+[
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "**Custom Block**: This is a custom block"
+    }
+  }
+]
+```
 
 [Slack blocks]: https://api.slack.com/reference/block-kit/blocks
 
-Default: No custom blocks
+Default: `''`
 
 ## Example usage
 ```yaml
@@ -59,14 +70,10 @@ slack_summary:
         success-emoji: ':heavy-check-mark:'
         skipped-emoji: ':heavy-minus-sign:'
         failed-emoji: ':heavy-cross-mark:'
-        custom-blocks: |
-          [
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "**Custom Block**: This is a custom block"
-              }
-            }
-          ]
 ```
+
+Including this in the [test workflow] in this repo produces the following message:
+
+![Example message](img/message.png)
+
+[test workflow]: .github/workflows/test.yml
