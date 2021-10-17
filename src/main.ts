@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { Block } from '@slack/types';
-import ActionsClient from './client';
+import ActionsClient from './actionsClient';
 import Message from './message';
 import SlackClient from './slackClient';
 import WorkflowSummariser from './summariser';

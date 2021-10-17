@@ -1,4 +1,4 @@
-import ActionsClient from './client';
+import ActionsClient from './actionsClient';
 import WorkflowSummariser from './summariser';
 import { Job } from './types';
 

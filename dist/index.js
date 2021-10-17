@@ -12530,7 +12530,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 4970:
+/***/ 8713:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -12631,7 +12631,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const client_1 = __importDefault(__nccwpck_require__(4970));
+const actionsClient_1 = __importDefault(__nccwpck_require__(8713));
 const message_1 = __importDefault(__nccwpck_require__(7899));
 const slackClient_1 = __importDefault(__nccwpck_require__(9945));
 const summariser_1 = __importDefault(__nccwpck_require__(2553));
@@ -12649,7 +12649,7 @@ function run() {
             const customBlocks = parseCustomBlocks();
             const { owner, repo } = github.context.repo;
             const { runId, workflow, actor } = github.context;
-            const actionsClient = new client_1.default(githubToken, owner, repo);
+            const actionsClient = new actionsClient_1.default(githubToken, owner, repo);
             const workflowSummariser = new summariser_1.default(actionsClient);
             const client = new slackClient_1.default(webhookUrl);
             const summary = yield workflowSummariser.summariseWorkflow(workflow, runId, actor);

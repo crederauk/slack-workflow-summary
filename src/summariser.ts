@@ -1,4 +1,4 @@
-import ActionsClient from './client';
+import ActionsClient from './actionsClient';
 import { WorkflowSummary } from './types';
 
 export default class WorkflowSummariser {
