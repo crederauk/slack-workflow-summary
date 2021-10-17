@@ -16,6 +16,10 @@ inputs:
     description: 'Emoji to use to indicate a job was skipped'
     required: false
     default: ':heavy_minus_sign:'
+  cancelled-emoji:
+    description: 'Emoji to use to indicate a job was cancelled'
+    required: false
+    default: ':no_entry_sign:'
   failed-emoji:
     description: 'Emoji to use to indicate a job failed'
     required: false

@@ -22,6 +22,11 @@ The emoji used to indicate a skipped job.
 
 Default: `:heavy_minus_sign:` ➖
 
+### `cancelled-emoji`
+The emoji used to indicate a cancelled job.
+
+Default: `:no_entry_sign:` :no_entry_sign:
+
 ### `failed-emoji`
 The emoji used to indicate a failed job.
 

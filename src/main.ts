@@ -14,6 +14,7 @@ async function run(): Promise<void> {
     const emojis: SummaryEmojis = {
       success: core.getInput('success-emoji'),
       skipped: core.getInput('skipped-emoji'),
+      cancelled: core.getInput('cancelled-emoji'),
       failure: core.getInput('failed-emoji'),
     };
     const customBlocks = parseCustomBlocks();

@@ -5,6 +5,7 @@ import { SummaryEmojis, WorkflowSummary } from './types';
 const emojis: SummaryEmojis = {
   success: ':heavy-check-mark:',
   skipped: ':heavy-minus-sign:',
+  cancelled: ':no_entry_sign:',
   failure: ':heavy-cross-mark:',
 };
 
@@ -23,6 +24,10 @@ const workflowSummary: WorkflowSummary = {
     },
     {
       name: 'Job 3',
+      result: 'cancelled',
+    },
+    {
+      name: 'Job 4',
       result: 'failure',
     },
   ],
@@ -97,7 +102,14 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `${emojis.failure}  Job 3`,
+        text: `${emojis.cancelled}  Job 3`,
+      },
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `${emojis.failure}  Job 4`,
       },
     },
     {
