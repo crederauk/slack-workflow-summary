@@ -17,6 +17,8 @@ const DIVIDER_BLOCK: DividerBlock = {
 
 type CustomBlock = Block | KnownBlock;
 
+const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
+
 const markdownSection: (text: string) => SectionBlock = (text) => ({
   type: 'section',
   text: {
@@ -51,7 +53,11 @@ export default class Message {
         this.renderHeader(),
         DIVIDER_BLOCK,
         this.renderContext(),
-        markdownSection(`*Deployment Status*: ${this.summary.result}`),
+        markdownSection(
+          `*Deployment Status*: ${this.emojis[this.summary.result]} ${capitalize(
+            this.summary.result,
+          )}`,
+        ),
         DIVIDER_BLOCK,
         ...this.renderJobConclusions(),
         ...footer,

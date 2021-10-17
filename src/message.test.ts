@@ -71,7 +71,7 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: '*Deployment Status*: success',
+        text: '*Deployment Status*: :heavy-check-mark: Success',
       },
     },
     {

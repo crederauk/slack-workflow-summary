@@ -12685,6 +12685,7 @@ const FAILURE_HEADER = 'Deployment Failed :rotating_light:';
 const DIVIDER_BLOCK = {
     type: 'divider',
 };
+const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
 const markdownSection = (text) => ({
     type: 'section',
     text: {
@@ -12707,7 +12708,7 @@ class Message {
                 this.renderHeader(),
                 DIVIDER_BLOCK,
                 this.renderContext(),
-                markdownSection(`*Deployment Status*: ${this.summary.result}`),
+                markdownSection(`*Deployment Status*: ${this.emojis[this.summary.result]} ${capitalize(this.summary.result)}`),
                 DIVIDER_BLOCK,
                 ...this.renderJobConclusions(),
                 ...footer,
