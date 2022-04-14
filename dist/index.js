@@ -12650,8 +12650,10 @@ function run() {
             };
             const customBlocks = parseCustomBlocks();
             const excludedJobs = parseExcludedJobs();
+            const runId = Number(core.getInput('workflow-run-id')) || github.context.runId;
+            const workflow = core.getInput('workflow-name') || github.context.workflow;
+            const actor = core.getInput('user-name') || github.context.actor;
             const { owner, repo } = github.context.repo;
-            const { runId, workflow, actor } = github.context;
             const actionsClient = new actionsClient_1.default(githubToken, owner, repo, excludedJobs);
             const workflowSummariser = new summariser_1.default(actionsClient);
             const client = new slackClient_1.default(webhookUrl);
