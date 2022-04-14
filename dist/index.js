@@ -12566,10 +12566,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__nccwpck_require__(5438));
 class ActionsClient {
-    constructor(token, owner, repo) {
+    constructor(token, owner, repo, excludedJobs) {
         this.octokit = github.getOctokit(token);
         this.owner = owner;
         this.repo = repo;
+        this.excludedJobs = excludedJobs;
     }
     getCompletedJobs(runId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -12580,6 +12581,7 @@ class ActionsClient {
             });
             return response.data.jobs
                 .filter(({ status }) => status === 'completed')
+                .filter(({ name }) => !this.excludedJobs.includes(name))
                 .map((jobData) => ({
                 name: jobData.name,
                 result: jobData.conclusion,
@@ -12647,9 +12649,10 @@ function run() {
                 failure: core.getInput('failed-emoji'),
             };
             const customBlocks = parseCustomBlocks();
+            const excludedJobs = parseExcludedJobs();
             const { owner, repo } = github.context.repo;
             const { runId, workflow, actor } = github.context;
-            const actionsClient = new actionsClient_1.default(githubToken, owner, repo);
+            const actionsClient = new actionsClient_1.default(githubToken, owner, repo, excludedJobs);
             const workflowSummariser = new summariser_1.default(actionsClient);
             const client = new slackClient_1.default(webhookUrl);
             const summary = yield workflowSummariser.summariseWorkflow(workflow, runId, actor);
@@ -12668,6 +12671,13 @@ const parseCustomBlocks = () => {
         return undefined;
     }
     return JSON.parse(customBlocksString);
+};
+const parseExcludedJobs = () => {
+    const excludedJobs = core.getInput('excluded-jobs');
+    if (excludedJobs === '') {
+        return [];
+    }
+    return JSON.parse(excludedJobs);
 };
 run();
 

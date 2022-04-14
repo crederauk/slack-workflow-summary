@@ -46,7 +46,7 @@ describe('ActionsClient', () => {
   let client: ActionsClient;
   beforeEach(() => {
     (github.getOctokit as jest.Mock).mockReturnValue(mockOctokit);
-    client = new ActionsClient('token', 'owner', 'repo');
+    client = new ActionsClient('token', 'owner', 'repo', []);
   });
 
   describe('getCompletedJobs', () => {
@@ -87,6 +87,27 @@ describe('ActionsClient', () => {
         run_id: 1234,
       });
       expect(jobs).toEqual(expectedJobs);
+    });
+
+    it('should filter out excluded jobs', async () => {
+      client = new ActionsClient('token', 'owner', 'repo', ['Job 3']);
+      const excludedJob = {
+        name: 'Job 3',
+        result: 'success',
+      };
+      const jobsToReturn = [
+        ...mockJobs,
+        {
+          name: 'Job 3',
+          status: 'completed',
+          conclusion: 'success',
+        },
+      ];
+      listJobsForWorkflowRun.mockReturnValue(Promise.resolve({ data: { jobs: jobsToReturn } }));
+
+      const jobs = await client.getCompletedJobs(1234);
+      // console.log(jobs)
+      expect(jobs).not.toContain(excludedJob);
     });
   });
 });

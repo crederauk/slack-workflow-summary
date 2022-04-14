@@ -18,10 +18,11 @@ async function run(): Promise<void> {
       failure: core.getInput('failed-emoji'),
     };
     const customBlocks = parseCustomBlocks();
+    const excludedJobs = parseExcludedJobs();
     const { owner, repo } = github.context.repo;
     const { runId, workflow, actor } = github.context;
 
-    const actionsClient = new ActionsClient(githubToken, owner, repo);
+    const actionsClient = new ActionsClient(githubToken, owner, repo, excludedJobs);
     const workflowSummariser = new WorkflowSummariser(actionsClient);
     const client = new SlackClient(webhookUrl);
 
@@ -42,6 +43,15 @@ const parseCustomBlocks = () => {
   }
 
   return JSON.parse(customBlocksString) as Block[];
+};
+
+const parseExcludedJobs = () => {
+  const excludedJobs = core.getInput('excluded-jobs');
+  if (excludedJobs === '') {
+    return [];
+  }
+
+  return JSON.parse(excludedJobs) as string[];
 };
 
 run();
