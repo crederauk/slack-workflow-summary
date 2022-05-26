@@ -56,4 +56,4 @@ const parseExcludedJobs = () => {
   return JSON.parse(excludedJobs) as string[];
 };
 
-run();
+setTimeout(() => run(), 20000);
