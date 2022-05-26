@@ -69,7 +69,7 @@ slack_summary:
     - check_dist
   steps:
     - name: 'Post summary'
-      uses: lewis-od/slack-workflow-summary@v1
+      uses: crederauk/slack-workflow-summary@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
