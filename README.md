@@ -32,6 +32,11 @@ The emoji used to indicate a failed job.
 
 Default: `:x:` ❌
 
+### `excluded-jobs`
+Jobs to be excluded from the Slack message. Should be an array of Job titles.
+
+Default: `''`
+
 ### `custom-blocks`
 Custom message blocks to include in the message, after the job summary. Should be an array of
 [Slack blocks] in JSON format, e.g.:
@@ -47,6 +52,7 @@ Custom message blocks to include in the message, after the job summary. Should b
 ]
 ```
 
+
 [Slack blocks]: https://api.slack.com/reference/block-kit/blocks
 
 Default: `''`
@@ -61,9 +67,9 @@ slack_summary:
     - test
     - lint_and_format
     - check_dist
-  steps:    
+  steps:
     - name: 'Post summary'
-      uses: lewis-od/slack-workflow-summary@v1
+      uses: crederauk/slack-workflow-summary@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}

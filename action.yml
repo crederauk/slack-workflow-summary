@@ -31,6 +31,10 @@ inputs:
     description: 'Custom blocks to insert into the Slack message after the job summaries. Should be a JSON array'
     required: false
     default: ''
+  workflow-run-id:
+    description: 'Name of the workflow to be sent to Slack message'
+    required: false
+
 runs:
   using: 'node12'
   main: 'dist/index.js'

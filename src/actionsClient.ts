@@ -5,11 +5,13 @@ export default class ActionsClient {
   private readonly octokit: Octokit;
   private readonly owner: string;
   private readonly repo: string;
+  private readonly excludedJobs: string[];
 
-  constructor(token: string, owner: string, repo: string) {
+  constructor(token: string, owner: string, repo: string, excludedJobs: string[]) {
     this.octokit = github.getOctokit(token);
     this.owner = owner;
     this.repo = repo;
+    this.excludedJobs = excludedJobs;
   }
 
   async getCompletedJobs(runId: number): Promise<Job[]> {
@@ -20,6 +22,7 @@ export default class ActionsClient {
     });
     return response.data.jobs
       .filter(({ status }) => status === 'completed')
+      .filter(({ name }) => !this.excludedJobs.includes(name))
       .map((jobData) => ({
         name: jobData.name as string,
         result: jobData.conclusion as JobResult,
