@@ -34,6 +34,9 @@ inputs:
   workflow-run-id:
     description: 'Name of the workflow to be sent to Slack message'
     required: false
+  excluded-jobs:
+    description: 'Jobs to be excluded from message. Should be an array of strings'
+    required: false
 
 runs:
   using: 'node12'
