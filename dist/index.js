@@ -12692,8 +12692,8 @@ setTimeout(() => run(), 20000);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const SUCCESS_HEADER = 'Deployment Success :rocket:';
-const FAILURE_HEADER = 'Deployment Failed :rotating_light:';
+const SUCCESS_HEADER = 'Workflow Run Success :rocket:';
+const FAILURE_HEADER = 'Workflow Run Failed :rotating_light:';
 const DIVIDER_BLOCK = {
     type: 'divider',
 };
@@ -12721,7 +12721,7 @@ class Message {
                 DIVIDER_BLOCK,
                 this.renderWorkflowName(),
                 this.renderInitiatedBy(),
-                markdownSection(`*Deployment Status*: ${this.emojis[this.summary.result]} ${capitalize(this.summary.result)}`),
+                markdownSection(`*Workflow Run Status*: ${this.emojis[this.summary.result]} ${capitalize(this.summary.result)}`),
                 DIVIDER_BLOCK,
                 ...this.renderJobConclusions(),
                 ...footer,

@@ -42,7 +42,7 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'header',
       text: {
         type: 'plain_text',
-        text: 'Deployment Success :rocket:',
+        text: 'Workflow Run Success :rocket:',
         emoji: true,
       },
     },
@@ -80,7 +80,7 @@ const expectedMessageAttachment: MessageAttachment = {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: '*Deployment Status*: :heavy-check-mark: Success',
+        text: '*Workflow Run Status*: :heavy-check-mark: Success',
       },
     },
     {

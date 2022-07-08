@@ -9,8 +9,8 @@ import {
 } from '@slack/types';
 import { SummaryEmojis, WorkflowSummary } from './types';
 
-const SUCCESS_HEADER = 'Deployment Success :rocket:';
-const FAILURE_HEADER = 'Deployment Failed :rotating_light:';
+const SUCCESS_HEADER = 'Workflow Run Success :rocket:';
+const FAILURE_HEADER = 'Workflow Run Failed :rotating_light:';
 const DIVIDER_BLOCK: DividerBlock = {
   type: 'divider',
 };
@@ -55,7 +55,7 @@ export default class Message {
         this.renderWorkflowName(),
         this.renderInitiatedBy(),
         markdownSection(
-          `*Deployment Status*: ${this.emojis[this.summary.result]} ${capitalize(
+          `*Workflow Run Status*: ${this.emojis[this.summary.result]} ${capitalize(
             this.summary.result,
           )}`,
         ),
