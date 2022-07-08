@@ -38,11 +38,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-modules-
 
-      - name: 'Use Node 12.x'
+      - name: 'Use Node 16.x'
         if: steps.yarn_cache.outputs.cache-hit != 'true' || steps.modules_cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: 16.x
 
       - name: 'Install dependencies'
         if: steps.yarn_cache.outputs.cache-hit != 'true' || steps.modules_cache.outputs.cache-hit != 'true'
@@ -61,10 +61,10 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v2
 
-      - name: 'Use Node.js 12.x'
+      - name: 'Use Node.js 16.x'
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: 16.x
 
       - name: 'Restore yarn cache'
         uses: actions/cache@v2
@@ -93,10 +93,10 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v2
 
-      - name: 'Use Node.js 12.x'
+      - name: 'Use Node.js 16.x'
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: 16.x
 
       - name: 'Get yarn cache'
         uses: actions/cache@v2
@@ -129,10 +129,10 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v2
 
-      - name: 'Use Node.js 12.x'
+      - name: 'Use Node.js 16.x'
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
+          node-version: 16.x
 
       - name: 'Get yarn cache'
         uses: actions/cache@v2
