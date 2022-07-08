@@ -1,6 +1,6 @@
 {
   "name": "slack-workflow-summary",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "description": "Github Action to post a summary of the current workflow to slack",
   "main": "src/main.ts",
