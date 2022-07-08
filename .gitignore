@@ -1,5 +1,6 @@
-# Dependency directory
+# Dependency directories
 node_modules
+.yarn/cache
 
 # Rest pulled from https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
