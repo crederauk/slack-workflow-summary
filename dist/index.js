@@ -5,7 +5,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"@slack/webhook","version":"6.0.0","description":"Official library for using the Slack Platform\'s Incoming Webhooks","author":"Slack Technologies, Inc.","license":"MIT","keywords":["slack","request","client","http","api","proxy"],"main":"dist/index.js","types":"./dist/index.d.ts","files":["dist/**/*"],"engines":{"node":">= 12.13.0","npm":">= 6.12.0"},"repository":"slackapi/node-slack-sdk","homepage":"https://slack.dev/node-slack-sdk/webhook","publishConfig":{"access":"public"},"bugs":{"url":"https://github.com/slackapi/node-slack-sdk/issues"},"scripts":{"prepare":"npm run build","build":"npm run build:clean && tsc","build:clean":"shx rm -rf ./dist ./coverage ./.nyc_output","lint":"tslint --project .","test":"npm run build && nyc mocha --config .mocharc.json src/*.spec.js","coverage":"codecov -F webhook --root=$PWD","ref-docs:model":"api-extractor run"},"dependencies":{"@slack/types":"^1.2.1","@types/node":">=12.0.0","axios":"^0.21.1"},"devDependencies":{"@microsoft/api-extractor":"^7.3.4","@types/chai":"^4.1.7","@types/mocha":"^5.2.6","chai":"^4.2.0","codecov":"^3.2.0","mocha":"^6.0.2","nock":"^10.0.6","nyc":"^14.1.1","shx":"^0.3.2","sinon":"^7.2.7","source-map-support":"^0.5.10","ts-node":"^8.0.3","tslint":"^5.13.1","tslint-config-airbnb":"^5.11.1","typescript":"^4.1.0"}}');
+module.exports = JSON.parse('{"name":"@slack/webhook","version":"6.1.0","description":"Official library for using the Slack Platform\'s Incoming Webhooks","author":"Slack Technologies, LLC","license":"MIT","keywords":["slack","request","client","http","api","proxy"],"main":"dist/index.js","types":"./dist/index.d.ts","files":["dist/**/*"],"engines":{"node":">= 12.13.0","npm":">= 6.12.0"},"repository":"slackapi/node-slack-sdk","homepage":"https://slack.dev/node-slack-sdk/webhook","publishConfig":{"access":"public"},"bugs":{"url":"https://github.com/slackapi/node-slack-sdk/issues"},"scripts":{"prepare":"npm run build","build":"npm run build:clean && tsc","build:clean":"shx rm -rf ./dist ./coverage ./.nyc_output","lint":"eslint --ext .ts src","test":"npm run lint && npm run build && nyc mocha --config .mocharc.json src/*.spec.js","coverage":"codecov -F webhook --root=$PWD","ref-docs:model":"api-extractor run"},"dependencies":{"@slack/types":"^1.2.1","@types/node":">=12.0.0","axios":"^0.21.4"},"devDependencies":{"@microsoft/api-extractor":"^7.3.4","@typescript-eslint/eslint-plugin":"^4.4.1","@typescript-eslint/parser":"^4.4.0","@types/chai":"^4.1.7","@types/mocha":"^5.2.6","chai":"^4.2.0","codecov":"^3.2.0","eslint":"^7.32.0","eslint-config-airbnb-base":"^14.2.1","eslint-config-airbnb-typescript":"^12.3.1","eslint-plugin-import":"^2.22.1","eslint-plugin-jsdoc":"^30.6.1","eslint-plugin-node":"^11.1.0","mocha":"^9.1.0","nock":"^13.0.0","nyc":"^14.1.1","shx":"^0.3.2","sinon":"^7.2.7","source-map-support":"^0.5.10","ts-node":"^8.0.3","typescript":"^4.1.0"}}');
 
 /***/ }),
 
@@ -3811,7 +3811,9 @@ const instrument_1 = __nccwpck_require__(8645);
  * A client for Slack's Incoming Webhooks
  */
 class IncomingWebhook {
-    constructor(url, defaults = {}) {
+    constructor(url, defaults = {
+        timeout: 0,
+    }) {
         if (url === undefined) {
             throw new Error('Incoming webhook URL is required');
         }
@@ -3823,8 +3825,9 @@ class IncomingWebhook {
             httpsAgent: defaults.agent,
             maxRedirects: 0,
             proxy: false,
+            timeout: defaults.timeout,
             headers: {
-                'User-Agent': instrument_1.getUserAgent(),
+                'User-Agent': (0, instrument_1.getUserAgent)(),
             },
         });
         delete this.defaults.agent;
@@ -3849,10 +3852,10 @@ class IncomingWebhook {
         catch (error) {
             // Wrap errors in this packages own error types (abstract the implementation details' types)
             if (error.response !== undefined) {
-                throw errors_1.httpErrorWithOriginal(error);
+                throw (0, errors_1.httpErrorWithOriginal)(error);
             }
             else if (error.request !== undefined) {
-                throw errors_1.requestErrorWithOriginal(error);
+                throw (0, errors_1.requestErrorWithOriginal)(error);
             }
             else {
                 throw error;
@@ -3862,6 +3865,7 @@ class IncomingWebhook {
     /**
      * Processes an HTTP response into an IncomingWebhookResult.
      */
+    // eslint-disable-next-line class-methods-use-this
     buildResult(response) {
         return {
             text: response.data,
@@ -3964,7 +3968,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getUserAgent = exports.addAppMetadata = void 0;
 const os = __importStar(__nccwpck_require__(2087));
-const packageJson = __nccwpck_require__(7716); // tslint:disable-line:no-require-imports no-var-requires
+const packageJson = __nccwpck_require__(7716); // eslint-disable-line import/no-commonjs, @typescript-eslint/no-var-requires
 /**
  * Replaces occurrences of '/' with ':' in a string, since '/' is meaningful inside User-Agent strings as a separator.
  */
@@ -11211,7 +11215,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var Stream = _interopDefault(__nccwpck_require__(2413));
 var http = _interopDefault(__nccwpck_require__(8605));
 var Url = _interopDefault(__nccwpck_require__(8835));
-var whatwgUrl = _interopDefault(__nccwpck_require__(3323));
+var whatwgUrl = _interopDefault(__nccwpck_require__(8665));
 var https = _interopDefault(__nccwpck_require__(7211));
 var zlib = _interopDefault(__nccwpck_require__(8761));
 
@@ -12877,7 +12881,791 @@ exports.FetchError = FetchError;
 
 /***/ }),
 
-/***/ 5871:
+/***/ 1223:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var wrappy = __nccwpck_require__(2940)
+module.exports = wrappy(once)
+module.exports.strict = wrappy(onceStrict)
+
+once.proto = once(function () {
+  Object.defineProperty(Function.prototype, 'once', {
+    value: function () {
+      return once(this)
+    },
+    configurable: true
+  })
+
+  Object.defineProperty(Function.prototype, 'onceStrict', {
+    value: function () {
+      return onceStrict(this)
+    },
+    configurable: true
+  })
+})
+
+function once (fn) {
+  var f = function () {
+    if (f.called) return f.value
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  f.called = false
+  return f
+}
+
+function onceStrict (fn) {
+  var f = function () {
+    if (f.called)
+      throw new Error(f.onceError)
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  var name = fn.name || 'Function wrapped with `once`'
+  f.onceError = name + " shouldn't be called more than once"
+  f.called = false
+  return f
+}
+
+
+/***/ }),
+
+/***/ 5118:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+/* eslint-disable node/no-deprecated-api */
+
+
+
+var buffer = __nccwpck_require__(4293)
+var Buffer = buffer.Buffer
+
+var safer = {}
+
+var key
+
+for (key in buffer) {
+  if (!buffer.hasOwnProperty(key)) continue
+  if (key === 'SlowBuffer' || key === 'Buffer') continue
+  safer[key] = buffer[key]
+}
+
+var Safer = safer.Buffer = {}
+for (key in Buffer) {
+  if (!Buffer.hasOwnProperty(key)) continue
+  if (key === 'allocUnsafe' || key === 'allocUnsafeSlow') continue
+  Safer[key] = Buffer[key]
+}
+
+safer.Buffer.prototype = Buffer.prototype
+
+if (!Safer.from || Safer.from === Uint8Array.from) {
+  Safer.from = function (value, encodingOrOffset, length) {
+    if (typeof value === 'number') {
+      throw new TypeError('The "value" argument must not be of type number. Received type ' + typeof value)
+    }
+    if (value && typeof value.length === 'undefined') {
+      throw new TypeError('The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type ' + typeof value)
+    }
+    return Buffer(value, encodingOrOffset, length)
+  }
+}
+
+if (!Safer.alloc) {
+  Safer.alloc = function (size, fill, encoding) {
+    if (typeof size !== 'number') {
+      throw new TypeError('The "size" argument must be of type number. Received type ' + typeof size)
+    }
+    if (size < 0 || size >= 2 * (1 << 30)) {
+      throw new RangeError('The value "' + size + '" is invalid for option "size"')
+    }
+    var buf = Buffer(size)
+    if (!fill || fill.length === 0) {
+      buf.fill(0)
+    } else if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
+    }
+    return buf
+  }
+}
+
+if (!safer.kStringMaxLength) {
+  try {
+    safer.kStringMaxLength = process.binding('buffer').kStringMaxLength
+  } catch (e) {
+    // we can't determine kStringMaxLength in environments where process.binding
+    // is unsupported, so let's not set it
+  }
+}
+
+if (!safer.constants) {
+  safer.constants = {
+    MAX_LENGTH: safer.kMaxLength
+  }
+  if (safer.kStringMaxLength) {
+    safer.constants.MAX_STRING_LENGTH = safer.kStringMaxLength
+  }
+}
+
+module.exports = safer
+
+
+/***/ }),
+
+/***/ 9318:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const os = __nccwpck_require__(2087);
+const tty = __nccwpck_require__(3867);
+const hasFlag = __nccwpck_require__(1621);
+
+const {env} = process;
+
+let forceColor;
+if (hasFlag('no-color') ||
+	hasFlag('no-colors') ||
+	hasFlag('color=false') ||
+	hasFlag('color=never')) {
+	forceColor = 0;
+} else if (hasFlag('color') ||
+	hasFlag('colors') ||
+	hasFlag('color=true') ||
+	hasFlag('color=always')) {
+	forceColor = 1;
+}
+
+if ('FORCE_COLOR' in env) {
+	if (env.FORCE_COLOR === 'true') {
+		forceColor = 1;
+	} else if (env.FORCE_COLOR === 'false') {
+		forceColor = 0;
+	} else {
+		forceColor = env.FORCE_COLOR.length === 0 ? 1 : Math.min(parseInt(env.FORCE_COLOR, 10), 3);
+	}
+}
+
+function translateLevel(level) {
+	if (level === 0) {
+		return false;
+	}
+
+	return {
+		level,
+		hasBasic: true,
+		has256: level >= 2,
+		has16m: level >= 3
+	};
+}
+
+function supportsColor(haveStream, streamIsTTY) {
+	if (forceColor === 0) {
+		return 0;
+	}
+
+	if (hasFlag('color=16m') ||
+		hasFlag('color=full') ||
+		hasFlag('color=truecolor')) {
+		return 3;
+	}
+
+	if (hasFlag('color=256')) {
+		return 2;
+	}
+
+	if (haveStream && !streamIsTTY && forceColor === undefined) {
+		return 0;
+	}
+
+	const min = forceColor || 0;
+
+	if (env.TERM === 'dumb') {
+		return min;
+	}
+
+	if (process.platform === 'win32') {
+		// Windows 10 build 10586 is the first Windows release that supports 256 colors.
+		// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
+		const osRelease = os.release().split('.');
+		if (
+			Number(osRelease[0]) >= 10 &&
+			Number(osRelease[2]) >= 10586
+		) {
+			return Number(osRelease[2]) >= 14931 ? 3 : 2;
+		}
+
+		return 1;
+	}
+
+	if ('CI' in env) {
+		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI', 'GITHUB_ACTIONS', 'BUILDKITE'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
+			return 1;
+		}
+
+		return min;
+	}
+
+	if ('TEAMCITY_VERSION' in env) {
+		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
+	}
+
+	if (env.COLORTERM === 'truecolor') {
+		return 3;
+	}
+
+	if ('TERM_PROGRAM' in env) {
+		const version = parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
+
+		switch (env.TERM_PROGRAM) {
+			case 'iTerm.app':
+				return version >= 3 ? 3 : 2;
+			case 'Apple_Terminal':
+				return 2;
+			// No default
+		}
+	}
+
+	if (/-256(color)?$/i.test(env.TERM)) {
+		return 2;
+	}
+
+	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+		return 1;
+	}
+
+	if ('COLORTERM' in env) {
+		return 1;
+	}
+
+	return min;
+}
+
+function getSupportLevel(stream) {
+	const level = supportsColor(stream, stream && stream.isTTY);
+	return translateLevel(level);
+}
+
+module.exports = {
+	supportsColor: getSupportLevel,
+	stdout: translateLevel(supportsColor(true, tty.isatty(1))),
+	stderr: translateLevel(supportsColor(true, tty.isatty(2)))
+};
+
+
+/***/ }),
+
+/***/ 4256:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var punycode = __nccwpck_require__(4213);
+var mappingTable = __nccwpck_require__(68);
+
+var PROCESSING_OPTIONS = {
+  TRANSITIONAL: 0,
+  NONTRANSITIONAL: 1
+};
+
+function normalize(str) { // fix bug in v8
+  return str.split('\u0000').map(function (s) { return s.normalize('NFC'); }).join('\u0000');
+}
+
+function findStatus(val) {
+  var start = 0;
+  var end = mappingTable.length - 1;
+
+  while (start <= end) {
+    var mid = Math.floor((start + end) / 2);
+
+    var target = mappingTable[mid];
+    if (target[0][0] <= val && target[0][1] >= val) {
+      return target;
+    } else if (target[0][0] > val) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
+    }
+  }
+
+  return null;
+}
+
+var regexAstralSymbols = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+
+function countSymbols(string) {
+  return string
+    // replace every surrogate pair with a BMP symbol
+    .replace(regexAstralSymbols, '_')
+    // then get the length
+    .length;
+}
+
+function mapChars(domain_name, useSTD3, processing_option) {
+  var hasError = false;
+  var processed = "";
+
+  var len = countSymbols(domain_name);
+  for (var i = 0; i < len; ++i) {
+    var codePoint = domain_name.codePointAt(i);
+    var status = findStatus(codePoint);
+
+    switch (status[1]) {
+      case "disallowed":
+        hasError = true;
+        processed += String.fromCodePoint(codePoint);
+        break;
+      case "ignored":
+        break;
+      case "mapped":
+        processed += String.fromCodePoint.apply(String, status[2]);
+        break;
+      case "deviation":
+        if (processing_option === PROCESSING_OPTIONS.TRANSITIONAL) {
+          processed += String.fromCodePoint.apply(String, status[2]);
+        } else {
+          processed += String.fromCodePoint(codePoint);
+        }
+        break;
+      case "valid":
+        processed += String.fromCodePoint(codePoint);
+        break;
+      case "disallowed_STD3_mapped":
+        if (useSTD3) {
+          hasError = true;
+          processed += String.fromCodePoint(codePoint);
+        } else {
+          processed += String.fromCodePoint.apply(String, status[2]);
+        }
+        break;
+      case "disallowed_STD3_valid":
+        if (useSTD3) {
+          hasError = true;
+        }
+
+        processed += String.fromCodePoint(codePoint);
+        break;
+    }
+  }
+
+  return {
+    string: processed,
+    error: hasError
+  };
+}
+
+var combiningMarksRegex = /[\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u0711\u0730-\u074A\u07A6-\u07B0\u07EB-\u07F3\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u08E4-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A70\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B56\u0B57\u0B62\u0B63\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0C00-\u0C03\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0D01-\u0D03\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D82\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0EB1\u0EB4-\u0EB9\u0EBB\u0EBC\u0EC8-\u0ECD\u0F18\u0F19\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F\u109A-\u109D\u135D-\u135F\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u180B-\u180D\u18A9\u1920-\u192B\u1930-\u193B\u19B0-\u19C0\u19C8\u19C9\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F\u1AB0-\u1ABE\u1B00-\u1B04\u1B34-\u1B44\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BE6-\u1BF3\u1C24-\u1C37\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF2-\u1CF4\u1CF8\u1CF9\u1DC0-\u1DF5\u1DFC-\u1DFF\u20D0-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\uA66F-\uA672\uA674-\uA67D\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA880\uA881\uA8B4-\uA8C4\uA8E0-\uA8F1\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9E5\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uFB1E\uFE00-\uFE0F\uFE20-\uFE2D]|\uD800[\uDDFD\uDEE0\uDF76-\uDF7A]|\uD802[\uDE01-\uDE03\uDE05\uDE06\uDE0C-\uDE0F\uDE38-\uDE3A\uDE3F\uDEE5\uDEE6]|\uD804[\uDC00-\uDC02\uDC38-\uDC46\uDC7F-\uDC82\uDCB0-\uDCBA\uDD00-\uDD02\uDD27-\uDD34\uDD73\uDD80-\uDD82\uDDB3-\uDDC0\uDE2C-\uDE37\uDEDF-\uDEEA\uDF01-\uDF03\uDF3C\uDF3E-\uDF44\uDF47\uDF48\uDF4B-\uDF4D\uDF57\uDF62\uDF63\uDF66-\uDF6C\uDF70-\uDF74]|\uD805[\uDCB0-\uDCC3\uDDAF-\uDDB5\uDDB8-\uDDC0\uDE30-\uDE40\uDEAB-\uDEB7]|\uD81A[\uDEF0-\uDEF4\uDF30-\uDF36]|\uD81B[\uDF51-\uDF7E\uDF8F-\uDF92]|\uD82F[\uDC9D\uDC9E]|\uD834[\uDD65-\uDD69\uDD6D-\uDD72\uDD7B-\uDD82\uDD85-\uDD8B\uDDAA-\uDDAD\uDE42-\uDE44]|\uD83A[\uDCD0-\uDCD6]|\uDB40[\uDD00-\uDDEF]/;
+
+function validateLabel(label, processing_option) {
+  if (label.substr(0, 4) === "xn--") {
+    label = punycode.toUnicode(label);
+    processing_option = PROCESSING_OPTIONS.NONTRANSITIONAL;
+  }
+
+  var error = false;
+
+  if (normalize(label) !== label ||
+      (label[3] === "-" && label[4] === "-") ||
+      label[0] === "-" || label[label.length - 1] === "-" ||
+      label.indexOf(".") !== -1 ||
+      label.search(combiningMarksRegex) === 0) {
+    error = true;
+  }
+
+  var len = countSymbols(label);
+  for (var i = 0; i < len; ++i) {
+    var status = findStatus(label.codePointAt(i));
+    if ((processing === PROCESSING_OPTIONS.TRANSITIONAL && status[1] !== "valid") ||
+        (processing === PROCESSING_OPTIONS.NONTRANSITIONAL &&
+         status[1] !== "valid" && status[1] !== "deviation")) {
+      error = true;
+      break;
+    }
+  }
+
+  return {
+    label: label,
+    error: error
+  };
+}
+
+function processing(domain_name, useSTD3, processing_option) {
+  var result = mapChars(domain_name, useSTD3, processing_option);
+  result.string = normalize(result.string);
+
+  var labels = result.string.split(".");
+  for (var i = 0; i < labels.length; ++i) {
+    try {
+      var validation = validateLabel(labels[i]);
+      labels[i] = validation.label;
+      result.error = result.error || validation.error;
+    } catch(e) {
+      result.error = true;
+    }
+  }
+
+  return {
+    string: labels.join("."),
+    error: result.error
+  };
+}
+
+module.exports.toASCII = function(domain_name, useSTD3, processing_option, verifyDnsLength) {
+  var result = processing(domain_name, useSTD3, processing_option);
+  var labels = result.string.split(".");
+  labels = labels.map(function(l) {
+    try {
+      return punycode.toASCII(l);
+    } catch(e) {
+      result.error = true;
+      return l;
+    }
+  });
+
+  if (verifyDnsLength) {
+    var total = labels.slice(0, labels.length - 1).join(".").length;
+    if (total.length > 253 || total.length === 0) {
+      result.error = true;
+    }
+
+    for (var i=0; i < labels.length; ++i) {
+      if (labels.length > 63 || labels.length === 0) {
+        result.error = true;
+        break;
+      }
+    }
+  }
+
+  if (result.error) return null;
+  return labels.join(".");
+};
+
+module.exports.toUnicode = function(domain_name, useSTD3) {
+  var result = processing(domain_name, useSTD3, PROCESSING_OPTIONS.NONTRANSITIONAL);
+
+  return {
+    domain: result.string,
+    error: result.error
+  };
+};
+
+module.exports.PROCESSING_OPTIONS = PROCESSING_OPTIONS;
+
+
+/***/ }),
+
+/***/ 4294:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = __nccwpck_require__(4219);
+
+
+/***/ }),
+
+/***/ 4219:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var net = __nccwpck_require__(1631);
+var tls = __nccwpck_require__(4016);
+var http = __nccwpck_require__(8605);
+var https = __nccwpck_require__(7211);
+var events = __nccwpck_require__(8614);
+var assert = __nccwpck_require__(2357);
+var util = __nccwpck_require__(1669);
+
+
+exports.httpOverHttp = httpOverHttp;
+exports.httpsOverHttp = httpsOverHttp;
+exports.httpOverHttps = httpOverHttps;
+exports.httpsOverHttps = httpsOverHttps;
+
+
+function httpOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  return agent;
+}
+
+function httpsOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+function httpOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  return agent;
+}
+
+function httpsOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+
+function TunnelingAgent(options) {
+  var self = this;
+  self.options = options || {};
+  self.proxyOptions = self.options.proxy || {};
+  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
+  self.requests = [];
+  self.sockets = [];
+
+  self.on('free', function onFree(socket, host, port, localAddress) {
+    var options = toOptions(host, port, localAddress);
+    for (var i = 0, len = self.requests.length; i < len; ++i) {
+      var pending = self.requests[i];
+      if (pending.host === options.host && pending.port === options.port) {
+        // Detect the request to connect same origin server,
+        // reuse the connection.
+        self.requests.splice(i, 1);
+        pending.request.onSocket(socket);
+        return;
+      }
+    }
+    socket.destroy();
+    self.removeSocket(socket);
+  });
+}
+util.inherits(TunnelingAgent, events.EventEmitter);
+
+TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
+  var self = this;
+  var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
+
+  if (self.sockets.length >= this.maxSockets) {
+    // We are over limit so we'll add it to the queue.
+    self.requests.push(options);
+    return;
+  }
+
+  // If we are under maxSockets create a new one.
+  self.createSocket(options, function(socket) {
+    socket.on('free', onFree);
+    socket.on('close', onCloseOrRemove);
+    socket.on('agentRemove', onCloseOrRemove);
+    req.onSocket(socket);
+
+    function onFree() {
+      self.emit('free', socket, options);
+    }
+
+    function onCloseOrRemove(err) {
+      self.removeSocket(socket);
+      socket.removeListener('free', onFree);
+      socket.removeListener('close', onCloseOrRemove);
+      socket.removeListener('agentRemove', onCloseOrRemove);
+    }
+  });
+};
+
+TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
+  var self = this;
+  var placeholder = {};
+  self.sockets.push(placeholder);
+
+  var connectOptions = mergeOptions({}, self.proxyOptions, {
+    method: 'CONNECT',
+    path: options.host + ':' + options.port,
+    agent: false,
+    headers: {
+      host: options.host + ':' + options.port
+    }
+  });
+  if (options.localAddress) {
+    connectOptions.localAddress = options.localAddress;
+  }
+  if (connectOptions.proxyAuth) {
+    connectOptions.headers = connectOptions.headers || {};
+    connectOptions.headers['Proxy-Authorization'] = 'Basic ' +
+        new Buffer(connectOptions.proxyAuth).toString('base64');
+  }
+
+  debug('making CONNECT request');
+  var connectReq = self.request(connectOptions);
+  connectReq.useChunkedEncodingByDefault = false; // for v0.6
+  connectReq.once('response', onResponse); // for v0.6
+  connectReq.once('upgrade', onUpgrade);   // for v0.6
+  connectReq.once('connect', onConnect);   // for v0.7 or later
+  connectReq.once('error', onError);
+  connectReq.end();
+
+  function onResponse(res) {
+    // Very hacky. This is necessary to avoid http-parser leaks.
+    res.upgrade = true;
+  }
+
+  function onUpgrade(res, socket, head) {
+    // Hacky.
+    process.nextTick(function() {
+      onConnect(res, socket, head);
+    });
+  }
+
+  function onConnect(res, socket, head) {
+    connectReq.removeAllListeners();
+    socket.removeAllListeners();
+
+    if (res.statusCode !== 200) {
+      debug('tunneling socket could not be established, statusCode=%d',
+        res.statusCode);
+      socket.destroy();
+      var error = new Error('tunneling socket could not be established, ' +
+        'statusCode=' + res.statusCode);
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    if (head.length > 0) {
+      debug('got illegal response body from proxy');
+      socket.destroy();
+      var error = new Error('got illegal response body from proxy');
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    debug('tunneling connection has established');
+    self.sockets[self.sockets.indexOf(placeholder)] = socket;
+    return cb(socket);
+  }
+
+  function onError(cause) {
+    connectReq.removeAllListeners();
+
+    debug('tunneling socket could not be established, cause=%s\n',
+          cause.message, cause.stack);
+    var error = new Error('tunneling socket could not be established, ' +
+                          'cause=' + cause.message);
+    error.code = 'ECONNRESET';
+    options.request.emit('error', error);
+    self.removeSocket(placeholder);
+  }
+};
+
+TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
+  var pos = this.sockets.indexOf(socket)
+  if (pos === -1) {
+    return;
+  }
+  this.sockets.splice(pos, 1);
+
+  var pending = this.requests.shift();
+  if (pending) {
+    // If we have pending requests and a socket gets closed a new one
+    // needs to be created to take over in the pool for the one that closed.
+    this.createSocket(pending, function(socket) {
+      pending.request.onSocket(socket);
+    });
+  }
+};
+
+function createSecureSocket(options, cb) {
+  var self = this;
+  TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
+    var hostHeader = options.request.getHeader('host');
+    var tlsOptions = mergeOptions({}, self.options, {
+      socket: socket,
+      servername: hostHeader ? hostHeader.replace(/:.*$/, '') : options.host
+    });
+
+    // 0 is dummy port for v0.6
+    var secureSocket = tls.connect(0, tlsOptions);
+    self.sockets[self.sockets.indexOf(socket)] = secureSocket;
+    cb(secureSocket);
+  });
+}
+
+
+function toOptions(host, port, localAddress) {
+  if (typeof host === 'string') { // since v0.10
+    return {
+      host: host,
+      port: port,
+      localAddress: localAddress
+    };
+  }
+  return host; // for v0.11 or later
+}
+
+function mergeOptions(target) {
+  for (var i = 1, len = arguments.length; i < len; ++i) {
+    var overrides = arguments[i];
+    if (typeof overrides === 'object') {
+      var keys = Object.keys(overrides);
+      for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
+        var k = keys[j];
+        if (overrides[k] !== undefined) {
+          target[k] = overrides[k];
+        }
+      }
+    }
+  }
+  return target;
+}
+
+
+var debug;
+if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
+  debug = function() {
+    var args = Array.prototype.slice.call(arguments);
+    if (typeof args[0] === 'string') {
+      args[0] = 'TUNNEL: ' + args[0];
+    } else {
+      args.unshift('TUNNEL:');
+    }
+    console.error.apply(console, args);
+  }
+} else {
+  debug = function() {};
+}
+exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 5030:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+function getUserAgent() {
+  if (typeof navigator === "object" && "userAgent" in navigator) {
+    return navigator.userAgent;
+  }
+
+  if (typeof process === "object" && "version" in process) {
+    return `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})`;
+  }
+
+  return "<environment undetectable>";
+}
+
+exports.getUserAgent = getUserAgent;
+//# sourceMappingURL=index.js.map
+
+
+/***/ }),
+
+/***/ 4886:
 /***/ ((module) => {
 
 "use strict";
@@ -13074,12 +13862,12 @@ conversions["RegExp"] = function (V, opts) {
 
 /***/ }),
 
-/***/ 8262:
+/***/ 7537:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-const usm = __nccwpck_require__(33);
+const usm = __nccwpck_require__(2158);
 
 exports.implementation = class URLImpl {
   constructor(constructorArgs) {
@@ -13282,15 +14070,15 @@ exports.implementation = class URLImpl {
 
 /***/ }),
 
-/***/ 653:
+/***/ 3394:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-const conversions = __nccwpck_require__(5871);
-const utils = __nccwpck_require__(276);
-const Impl = __nccwpck_require__(8262);
+const conversions = __nccwpck_require__(4886);
+const utils = __nccwpck_require__(3185);
+const Impl = __nccwpck_require__(7537);
 
 const impl = utils.implSymbol;
 
@@ -13486,26 +14274,26 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3323:
+/***/ 8665:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 
-exports.URL = __nccwpck_require__(653).interface;
-exports.serializeURL = __nccwpck_require__(33).serializeURL;
-exports.serializeURLOrigin = __nccwpck_require__(33).serializeURLOrigin;
-exports.basicURLParse = __nccwpck_require__(33).basicURLParse;
-exports.setTheUsername = __nccwpck_require__(33).setTheUsername;
-exports.setThePassword = __nccwpck_require__(33).setThePassword;
-exports.serializeHost = __nccwpck_require__(33).serializeHost;
-exports.serializeInteger = __nccwpck_require__(33).serializeInteger;
-exports.parseURL = __nccwpck_require__(33).parseURL;
+exports.URL = __nccwpck_require__(3394).interface;
+exports.serializeURL = __nccwpck_require__(2158).serializeURL;
+exports.serializeURLOrigin = __nccwpck_require__(2158).serializeURLOrigin;
+exports.basicURLParse = __nccwpck_require__(2158).basicURLParse;
+exports.setTheUsername = __nccwpck_require__(2158).setTheUsername;
+exports.setThePassword = __nccwpck_require__(2158).setThePassword;
+exports.serializeHost = __nccwpck_require__(2158).serializeHost;
+exports.serializeInteger = __nccwpck_require__(2158).serializeInteger;
+exports.parseURL = __nccwpck_require__(2158).parseURL;
 
 
 /***/ }),
 
-/***/ 33:
+/***/ 2158:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
@@ -14810,7 +15598,7 @@ module.exports.parseURL = function (input, options) {
 
 /***/ }),
 
-/***/ 276:
+/***/ 3185:
 /***/ ((module) => {
 
 "use strict";
@@ -14834,807 +15622,6 @@ module.exports.implForWrapper = function (wrapper) {
   return wrapper[module.exports.implSymbol];
 };
 
-
-
-/***/ }),
-
-/***/ 1223:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-var wrappy = __nccwpck_require__(2940)
-module.exports = wrappy(once)
-module.exports.strict = wrappy(onceStrict)
-
-once.proto = once(function () {
-  Object.defineProperty(Function.prototype, 'once', {
-    value: function () {
-      return once(this)
-    },
-    configurable: true
-  })
-
-  Object.defineProperty(Function.prototype, 'onceStrict', {
-    value: function () {
-      return onceStrict(this)
-    },
-    configurable: true
-  })
-})
-
-function once (fn) {
-  var f = function () {
-    if (f.called) return f.value
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  f.called = false
-  return f
-}
-
-function onceStrict (fn) {
-  var f = function () {
-    if (f.called)
-      throw new Error(f.onceError)
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  var name = fn.name || 'Function wrapped with `once`'
-  f.onceError = name + " shouldn't be called more than once"
-  f.called = false
-  return f
-}
-
-
-/***/ }),
-
-/***/ 5118:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-/* eslint-disable node/no-deprecated-api */
-
-
-
-var buffer = __nccwpck_require__(4293)
-var Buffer = buffer.Buffer
-
-var safer = {}
-
-var key
-
-for (key in buffer) {
-  if (!buffer.hasOwnProperty(key)) continue
-  if (key === 'SlowBuffer' || key === 'Buffer') continue
-  safer[key] = buffer[key]
-}
-
-var Safer = safer.Buffer = {}
-for (key in Buffer) {
-  if (!Buffer.hasOwnProperty(key)) continue
-  if (key === 'allocUnsafe' || key === 'allocUnsafeSlow') continue
-  Safer[key] = Buffer[key]
-}
-
-safer.Buffer.prototype = Buffer.prototype
-
-if (!Safer.from || Safer.from === Uint8Array.from) {
-  Safer.from = function (value, encodingOrOffset, length) {
-    if (typeof value === 'number') {
-      throw new TypeError('The "value" argument must not be of type number. Received type ' + typeof value)
-    }
-    if (value && typeof value.length === 'undefined') {
-      throw new TypeError('The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type ' + typeof value)
-    }
-    return Buffer(value, encodingOrOffset, length)
-  }
-}
-
-if (!Safer.alloc) {
-  Safer.alloc = function (size, fill, encoding) {
-    if (typeof size !== 'number') {
-      throw new TypeError('The "size" argument must be of type number. Received type ' + typeof size)
-    }
-    if (size < 0 || size >= 2 * (1 << 30)) {
-      throw new RangeError('The value "' + size + '" is invalid for option "size"')
-    }
-    var buf = Buffer(size)
-    if (!fill || fill.length === 0) {
-      buf.fill(0)
-    } else if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-    return buf
-  }
-}
-
-if (!safer.kStringMaxLength) {
-  try {
-    safer.kStringMaxLength = process.binding('buffer').kStringMaxLength
-  } catch (e) {
-    // we can't determine kStringMaxLength in environments where process.binding
-    // is unsupported, so let's not set it
-  }
-}
-
-if (!safer.constants) {
-  safer.constants = {
-    MAX_LENGTH: safer.kMaxLength
-  }
-  if (safer.kStringMaxLength) {
-    safer.constants.MAX_STRING_LENGTH = safer.kStringMaxLength
-  }
-}
-
-module.exports = safer
-
-
-/***/ }),
-
-/***/ 9318:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-const os = __nccwpck_require__(2087);
-const tty = __nccwpck_require__(3867);
-const hasFlag = __nccwpck_require__(1621);
-
-const {env} = process;
-
-let flagForceColor;
-if (hasFlag('no-color') ||
-	hasFlag('no-colors') ||
-	hasFlag('color=false') ||
-	hasFlag('color=never')) {
-	flagForceColor = 0;
-} else if (hasFlag('color') ||
-	hasFlag('colors') ||
-	hasFlag('color=true') ||
-	hasFlag('color=always')) {
-	flagForceColor = 1;
-}
-
-function envForceColor() {
-	if ('FORCE_COLOR' in env) {
-		if (env.FORCE_COLOR === 'true') {
-			return 1;
-		}
-
-		if (env.FORCE_COLOR === 'false') {
-			return 0;
-		}
-
-		return env.FORCE_COLOR.length === 0 ? 1 : Math.min(Number.parseInt(env.FORCE_COLOR, 10), 3);
-	}
-}
-
-function translateLevel(level) {
-	if (level === 0) {
-		return false;
-	}
-
-	return {
-		level,
-		hasBasic: true,
-		has256: level >= 2,
-		has16m: level >= 3
-	};
-}
-
-function supportsColor(haveStream, {streamIsTTY, sniffFlags = true} = {}) {
-	const noFlagForceColor = envForceColor();
-	if (noFlagForceColor !== undefined) {
-		flagForceColor = noFlagForceColor;
-	}
-
-	const forceColor = sniffFlags ? flagForceColor : noFlagForceColor;
-
-	if (forceColor === 0) {
-		return 0;
-	}
-
-	if (sniffFlags) {
-		if (hasFlag('color=16m') ||
-			hasFlag('color=full') ||
-			hasFlag('color=truecolor')) {
-			return 3;
-		}
-
-		if (hasFlag('color=256')) {
-			return 2;
-		}
-	}
-
-	if (haveStream && !streamIsTTY && forceColor === undefined) {
-		return 0;
-	}
-
-	const min = forceColor || 0;
-
-	if (env.TERM === 'dumb') {
-		return min;
-	}
-
-	if (process.platform === 'win32') {
-		// Windows 10 build 10586 is the first Windows release that supports 256 colors.
-		// Windows 10 build 14931 is the first release that supports 16m/TrueColor.
-		const osRelease = os.release().split('.');
-		if (
-			Number(osRelease[0]) >= 10 &&
-			Number(osRelease[2]) >= 10586
-		) {
-			return Number(osRelease[2]) >= 14931 ? 3 : 2;
-		}
-
-		return 1;
-	}
-
-	if ('CI' in env) {
-		if (['TRAVIS', 'CIRCLECI', 'APPVEYOR', 'GITLAB_CI', 'GITHUB_ACTIONS', 'BUILDKITE', 'DRONE'].some(sign => sign in env) || env.CI_NAME === 'codeship') {
-			return 1;
-		}
-
-		return min;
-	}
-
-	if ('TEAMCITY_VERSION' in env) {
-		return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-	}
-
-	if (env.COLORTERM === 'truecolor') {
-		return 3;
-	}
-
-	if ('TERM_PROGRAM' in env) {
-		const version = Number.parseInt((env.TERM_PROGRAM_VERSION || '').split('.')[0], 10);
-
-		switch (env.TERM_PROGRAM) {
-			case 'iTerm.app':
-				return version >= 3 ? 3 : 2;
-			case 'Apple_Terminal':
-				return 2;
-			// No default
-		}
-	}
-
-	if (/-256(color)?$/i.test(env.TERM)) {
-		return 2;
-	}
-
-	if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-		return 1;
-	}
-
-	if ('COLORTERM' in env) {
-		return 1;
-	}
-
-	return min;
-}
-
-function getSupportLevel(stream, options = {}) {
-	const level = supportsColor(stream, {
-		streamIsTTY: stream && stream.isTTY,
-		...options
-	});
-
-	return translateLevel(level);
-}
-
-module.exports = {
-	supportsColor: getSupportLevel,
-	stdout: getSupportLevel({isTTY: tty.isatty(1)}),
-	stderr: getSupportLevel({isTTY: tty.isatty(2)})
-};
-
-
-/***/ }),
-
-/***/ 4256:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-var punycode = __nccwpck_require__(4213);
-var mappingTable = __nccwpck_require__(68);
-
-var PROCESSING_OPTIONS = {
-  TRANSITIONAL: 0,
-  NONTRANSITIONAL: 1
-};
-
-function normalize(str) { // fix bug in v8
-  return str.split('\u0000').map(function (s) { return s.normalize('NFC'); }).join('\u0000');
-}
-
-function findStatus(val) {
-  var start = 0;
-  var end = mappingTable.length - 1;
-
-  while (start <= end) {
-    var mid = Math.floor((start + end) / 2);
-
-    var target = mappingTable[mid];
-    if (target[0][0] <= val && target[0][1] >= val) {
-      return target;
-    } else if (target[0][0] > val) {
-      end = mid - 1;
-    } else {
-      start = mid + 1;
-    }
-  }
-
-  return null;
-}
-
-var regexAstralSymbols = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-
-function countSymbols(string) {
-  return string
-    // replace every surrogate pair with a BMP symbol
-    .replace(regexAstralSymbols, '_')
-    // then get the length
-    .length;
-}
-
-function mapChars(domain_name, useSTD3, processing_option) {
-  var hasError = false;
-  var processed = "";
-
-  var len = countSymbols(domain_name);
-  for (var i = 0; i < len; ++i) {
-    var codePoint = domain_name.codePointAt(i);
-    var status = findStatus(codePoint);
-
-    switch (status[1]) {
-      case "disallowed":
-        hasError = true;
-        processed += String.fromCodePoint(codePoint);
-        break;
-      case "ignored":
-        break;
-      case "mapped":
-        processed += String.fromCodePoint.apply(String, status[2]);
-        break;
-      case "deviation":
-        if (processing_option === PROCESSING_OPTIONS.TRANSITIONAL) {
-          processed += String.fromCodePoint.apply(String, status[2]);
-        } else {
-          processed += String.fromCodePoint(codePoint);
-        }
-        break;
-      case "valid":
-        processed += String.fromCodePoint(codePoint);
-        break;
-      case "disallowed_STD3_mapped":
-        if (useSTD3) {
-          hasError = true;
-          processed += String.fromCodePoint(codePoint);
-        } else {
-          processed += String.fromCodePoint.apply(String, status[2]);
-        }
-        break;
-      case "disallowed_STD3_valid":
-        if (useSTD3) {
-          hasError = true;
-        }
-
-        processed += String.fromCodePoint(codePoint);
-        break;
-    }
-  }
-
-  return {
-    string: processed,
-    error: hasError
-  };
-}
-
-var combiningMarksRegex = /[\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u0711\u0730-\u074A\u07A6-\u07B0\u07EB-\u07F3\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u08E4-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A70\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B56\u0B57\u0B62\u0B63\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0C00-\u0C03\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0D01-\u0D03\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D82\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0EB1\u0EB4-\u0EB9\u0EBB\u0EBC\u0EC8-\u0ECD\u0F18\u0F19\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F\u109A-\u109D\u135D-\u135F\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u180B-\u180D\u18A9\u1920-\u192B\u1930-\u193B\u19B0-\u19C0\u19C8\u19C9\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F\u1AB0-\u1ABE\u1B00-\u1B04\u1B34-\u1B44\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BE6-\u1BF3\u1C24-\u1C37\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF2-\u1CF4\u1CF8\u1CF9\u1DC0-\u1DF5\u1DFC-\u1DFF\u20D0-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\uA66F-\uA672\uA674-\uA67D\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA880\uA881\uA8B4-\uA8C4\uA8E0-\uA8F1\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9E5\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uFB1E\uFE00-\uFE0F\uFE20-\uFE2D]|\uD800[\uDDFD\uDEE0\uDF76-\uDF7A]|\uD802[\uDE01-\uDE03\uDE05\uDE06\uDE0C-\uDE0F\uDE38-\uDE3A\uDE3F\uDEE5\uDEE6]|\uD804[\uDC00-\uDC02\uDC38-\uDC46\uDC7F-\uDC82\uDCB0-\uDCBA\uDD00-\uDD02\uDD27-\uDD34\uDD73\uDD80-\uDD82\uDDB3-\uDDC0\uDE2C-\uDE37\uDEDF-\uDEEA\uDF01-\uDF03\uDF3C\uDF3E-\uDF44\uDF47\uDF48\uDF4B-\uDF4D\uDF57\uDF62\uDF63\uDF66-\uDF6C\uDF70-\uDF74]|\uD805[\uDCB0-\uDCC3\uDDAF-\uDDB5\uDDB8-\uDDC0\uDE30-\uDE40\uDEAB-\uDEB7]|\uD81A[\uDEF0-\uDEF4\uDF30-\uDF36]|\uD81B[\uDF51-\uDF7E\uDF8F-\uDF92]|\uD82F[\uDC9D\uDC9E]|\uD834[\uDD65-\uDD69\uDD6D-\uDD72\uDD7B-\uDD82\uDD85-\uDD8B\uDDAA-\uDDAD\uDE42-\uDE44]|\uD83A[\uDCD0-\uDCD6]|\uDB40[\uDD00-\uDDEF]/;
-
-function validateLabel(label, processing_option) {
-  if (label.substr(0, 4) === "xn--") {
-    label = punycode.toUnicode(label);
-    processing_option = PROCESSING_OPTIONS.NONTRANSITIONAL;
-  }
-
-  var error = false;
-
-  if (normalize(label) !== label ||
-      (label[3] === "-" && label[4] === "-") ||
-      label[0] === "-" || label[label.length - 1] === "-" ||
-      label.indexOf(".") !== -1 ||
-      label.search(combiningMarksRegex) === 0) {
-    error = true;
-  }
-
-  var len = countSymbols(label);
-  for (var i = 0; i < len; ++i) {
-    var status = findStatus(label.codePointAt(i));
-    if ((processing === PROCESSING_OPTIONS.TRANSITIONAL && status[1] !== "valid") ||
-        (processing === PROCESSING_OPTIONS.NONTRANSITIONAL &&
-         status[1] !== "valid" && status[1] !== "deviation")) {
-      error = true;
-      break;
-    }
-  }
-
-  return {
-    label: label,
-    error: error
-  };
-}
-
-function processing(domain_name, useSTD3, processing_option) {
-  var result = mapChars(domain_name, useSTD3, processing_option);
-  result.string = normalize(result.string);
-
-  var labels = result.string.split(".");
-  for (var i = 0; i < labels.length; ++i) {
-    try {
-      var validation = validateLabel(labels[i]);
-      labels[i] = validation.label;
-      result.error = result.error || validation.error;
-    } catch(e) {
-      result.error = true;
-    }
-  }
-
-  return {
-    string: labels.join("."),
-    error: result.error
-  };
-}
-
-module.exports.toASCII = function(domain_name, useSTD3, processing_option, verifyDnsLength) {
-  var result = processing(domain_name, useSTD3, processing_option);
-  var labels = result.string.split(".");
-  labels = labels.map(function(l) {
-    try {
-      return punycode.toASCII(l);
-    } catch(e) {
-      result.error = true;
-      return l;
-    }
-  });
-
-  if (verifyDnsLength) {
-    var total = labels.slice(0, labels.length - 1).join(".").length;
-    if (total.length > 253 || total.length === 0) {
-      result.error = true;
-    }
-
-    for (var i=0; i < labels.length; ++i) {
-      if (labels.length > 63 || labels.length === 0) {
-        result.error = true;
-        break;
-      }
-    }
-  }
-
-  if (result.error) return null;
-  return labels.join(".");
-};
-
-module.exports.toUnicode = function(domain_name, useSTD3) {
-  var result = processing(domain_name, useSTD3, PROCESSING_OPTIONS.NONTRANSITIONAL);
-
-  return {
-    domain: result.string,
-    error: result.error
-  };
-};
-
-module.exports.PROCESSING_OPTIONS = PROCESSING_OPTIONS;
-
-
-/***/ }),
-
-/***/ 4294:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-module.exports = __nccwpck_require__(4219);
-
-
-/***/ }),
-
-/***/ 4219:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-
-var net = __nccwpck_require__(1631);
-var tls = __nccwpck_require__(4016);
-var http = __nccwpck_require__(8605);
-var https = __nccwpck_require__(7211);
-var events = __nccwpck_require__(8614);
-var assert = __nccwpck_require__(2357);
-var util = __nccwpck_require__(1669);
-
-
-exports.httpOverHttp = httpOverHttp;
-exports.httpsOverHttp = httpsOverHttp;
-exports.httpOverHttps = httpOverHttps;
-exports.httpsOverHttps = httpsOverHttps;
-
-
-function httpOverHttp(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = http.request;
-  return agent;
-}
-
-function httpsOverHttp(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = http.request;
-  agent.createSocket = createSecureSocket;
-  agent.defaultPort = 443;
-  return agent;
-}
-
-function httpOverHttps(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = https.request;
-  return agent;
-}
-
-function httpsOverHttps(options) {
-  var agent = new TunnelingAgent(options);
-  agent.request = https.request;
-  agent.createSocket = createSecureSocket;
-  agent.defaultPort = 443;
-  return agent;
-}
-
-
-function TunnelingAgent(options) {
-  var self = this;
-  self.options = options || {};
-  self.proxyOptions = self.options.proxy || {};
-  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
-  self.requests = [];
-  self.sockets = [];
-
-  self.on('free', function onFree(socket, host, port, localAddress) {
-    var options = toOptions(host, port, localAddress);
-    for (var i = 0, len = self.requests.length; i < len; ++i) {
-      var pending = self.requests[i];
-      if (pending.host === options.host && pending.port === options.port) {
-        // Detect the request to connect same origin server,
-        // reuse the connection.
-        self.requests.splice(i, 1);
-        pending.request.onSocket(socket);
-        return;
-      }
-    }
-    socket.destroy();
-    self.removeSocket(socket);
-  });
-}
-util.inherits(TunnelingAgent, events.EventEmitter);
-
-TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
-  var self = this;
-  var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
-
-  if (self.sockets.length >= this.maxSockets) {
-    // We are over limit so we'll add it to the queue.
-    self.requests.push(options);
-    return;
-  }
-
-  // If we are under maxSockets create a new one.
-  self.createSocket(options, function(socket) {
-    socket.on('free', onFree);
-    socket.on('close', onCloseOrRemove);
-    socket.on('agentRemove', onCloseOrRemove);
-    req.onSocket(socket);
-
-    function onFree() {
-      self.emit('free', socket, options);
-    }
-
-    function onCloseOrRemove(err) {
-      self.removeSocket(socket);
-      socket.removeListener('free', onFree);
-      socket.removeListener('close', onCloseOrRemove);
-      socket.removeListener('agentRemove', onCloseOrRemove);
-    }
-  });
-};
-
-TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
-  var self = this;
-  var placeholder = {};
-  self.sockets.push(placeholder);
-
-  var connectOptions = mergeOptions({}, self.proxyOptions, {
-    method: 'CONNECT',
-    path: options.host + ':' + options.port,
-    agent: false,
-    headers: {
-      host: options.host + ':' + options.port
-    }
-  });
-  if (options.localAddress) {
-    connectOptions.localAddress = options.localAddress;
-  }
-  if (connectOptions.proxyAuth) {
-    connectOptions.headers = connectOptions.headers || {};
-    connectOptions.headers['Proxy-Authorization'] = 'Basic ' +
-        new Buffer(connectOptions.proxyAuth).toString('base64');
-  }
-
-  debug('making CONNECT request');
-  var connectReq = self.request(connectOptions);
-  connectReq.useChunkedEncodingByDefault = false; // for v0.6
-  connectReq.once('response', onResponse); // for v0.6
-  connectReq.once('upgrade', onUpgrade);   // for v0.6
-  connectReq.once('connect', onConnect);   // for v0.7 or later
-  connectReq.once('error', onError);
-  connectReq.end();
-
-  function onResponse(res) {
-    // Very hacky. This is necessary to avoid http-parser leaks.
-    res.upgrade = true;
-  }
-
-  function onUpgrade(res, socket, head) {
-    // Hacky.
-    process.nextTick(function() {
-      onConnect(res, socket, head);
-    });
-  }
-
-  function onConnect(res, socket, head) {
-    connectReq.removeAllListeners();
-    socket.removeAllListeners();
-
-    if (res.statusCode !== 200) {
-      debug('tunneling socket could not be established, statusCode=%d',
-        res.statusCode);
-      socket.destroy();
-      var error = new Error('tunneling socket could not be established, ' +
-        'statusCode=' + res.statusCode);
-      error.code = 'ECONNRESET';
-      options.request.emit('error', error);
-      self.removeSocket(placeholder);
-      return;
-    }
-    if (head.length > 0) {
-      debug('got illegal response body from proxy');
-      socket.destroy();
-      var error = new Error('got illegal response body from proxy');
-      error.code = 'ECONNRESET';
-      options.request.emit('error', error);
-      self.removeSocket(placeholder);
-      return;
-    }
-    debug('tunneling connection has established');
-    self.sockets[self.sockets.indexOf(placeholder)] = socket;
-    return cb(socket);
-  }
-
-  function onError(cause) {
-    connectReq.removeAllListeners();
-
-    debug('tunneling socket could not be established, cause=%s\n',
-          cause.message, cause.stack);
-    var error = new Error('tunneling socket could not be established, ' +
-                          'cause=' + cause.message);
-    error.code = 'ECONNRESET';
-    options.request.emit('error', error);
-    self.removeSocket(placeholder);
-  }
-};
-
-TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
-  var pos = this.sockets.indexOf(socket)
-  if (pos === -1) {
-    return;
-  }
-  this.sockets.splice(pos, 1);
-
-  var pending = this.requests.shift();
-  if (pending) {
-    // If we have pending requests and a socket gets closed a new one
-    // needs to be created to take over in the pool for the one that closed.
-    this.createSocket(pending, function(socket) {
-      pending.request.onSocket(socket);
-    });
-  }
-};
-
-function createSecureSocket(options, cb) {
-  var self = this;
-  TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
-    var hostHeader = options.request.getHeader('host');
-    var tlsOptions = mergeOptions({}, self.options, {
-      socket: socket,
-      servername: hostHeader ? hostHeader.replace(/:.*$/, '') : options.host
-    });
-
-    // 0 is dummy port for v0.6
-    var secureSocket = tls.connect(0, tlsOptions);
-    self.sockets[self.sockets.indexOf(socket)] = secureSocket;
-    cb(secureSocket);
-  });
-}
-
-
-function toOptions(host, port, localAddress) {
-  if (typeof host === 'string') { // since v0.10
-    return {
-      host: host,
-      port: port,
-      localAddress: localAddress
-    };
-  }
-  return host; // for v0.11 or later
-}
-
-function mergeOptions(target) {
-  for (var i = 1, len = arguments.length; i < len; ++i) {
-    var overrides = arguments[i];
-    if (typeof overrides === 'object') {
-      var keys = Object.keys(overrides);
-      for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
-        var k = keys[j];
-        if (overrides[k] !== undefined) {
-          target[k] = overrides[k];
-        }
-      }
-    }
-  }
-  return target;
-}
-
-
-var debug;
-if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-  debug = function() {
-    var args = Array.prototype.slice.call(arguments);
-    if (typeof args[0] === 'string') {
-      args[0] = 'TUNNEL: ' + args[0];
-    } else {
-      args.unshift('TUNNEL:');
-    }
-    console.error.apply(console, args);
-  }
-} else {
-  debug = function() {};
-}
-exports.debug = debug; // for test
-
-
-/***/ }),
-
-/***/ 5030:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-
-function getUserAgent() {
-  if (typeof navigator === "object" && "userAgent" in navigator) {
-    return navigator.userAgent;
-  }
-
-  if (typeof process === "object" && "version" in process) {
-    return `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})`;
-  }
-
-  return "<environment undetectable>";
-}
-
-exports.getUserAgent = getUserAgent;
-//# sourceMappingURL=index.js.map
 
 
 /***/ }),
