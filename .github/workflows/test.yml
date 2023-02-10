@@ -16,9 +16,9 @@ jobs:
       - name: 'Output cache metadata'
         id: cache_metadata
         run: |
-          echo "::set-output name=key::${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}"
-          echo "::set-output name=yarn_path::$(yarn config get cacheFolder)"
-          echo "::set-output name=modules_path::./node_modules"
+          echo "key=${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}" >> $GITHUB_OUTPUT
+          echo "yarn_path=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+          echo "modules_path=./node_modules" >> $GITHUB_OUTPUT
 
       - name: 'Check for existing yarn cache'
         uses: actions/cache@v3
