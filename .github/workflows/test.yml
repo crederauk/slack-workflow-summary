@@ -20,7 +20,7 @@ jobs:
             echo "key=${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}"
             echo "yarn_path=$(yarn config get cacheFolder)"
             echo "modules_path=./node_modules"
-          } >> $GITHUB_OUTPUT
+          } >> "$GITHUB_OUTPUT"
 
       - name: 'Check for existing yarn cache'
         uses: actions/cache@v3
