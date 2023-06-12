@@ -1354,10 +1354,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.13.0":
-  version: 18.13.0
-  resolution: "@types/node@npm:18.13.0"
-  checksum: 4ea10f8802848b01672bce938f678b6774ca2cee0c9774f12275ab064ae07818419c3e2e41d6257ce7ba846d1ea26c63214aa1dfa4166fa3746291752b8c6416
+"@types/node@npm:^20.3.0":
+  version: 20.3.0
+  resolution: "@types/node@npm:20.3.0"
+  checksum: 613e878174febc0104dae210088645cbb5096a19ae5fdf57fbc06fa6ef71755b839858c2b313fb8c1df8b7c6660e1b5f7a64db2126af9d47d1d9238e2bc0a86d
   languageName: node
   linkType: hard
 
@@ -6204,7 +6204,7 @@ __metadata:
     "@actions/github": ^5.1.1
     "@slack/webhook": ^6.1.0
     "@types/jest": ^29.4.0
-    "@types/node": ^18.13.0
+    "@types/node": ^20.3.0
     "@typescript-eslint/eslint-plugin": ^5.59.6
     "@typescript-eslint/parser": ^5.59.6
     "@vercel/ncc": ^0.36.1
