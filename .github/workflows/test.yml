@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+env:
+  NODE_VERSION: '20.x'
 jobs:
   build_cache:
     name: 'Build Cache'
@@ -40,11 +41,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-modules-
 
-      - name: 'Use Node 20.x'
+      - name: 'Use Node ${{ env.NODE_VERSION }}'
         if: steps.yarn_cache.outputs.cache-hit != 'true' || steps.modules_cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: 'Install dependencies'
         if: steps.yarn_cache.outputs.cache-hit != 'true' || steps.modules_cache.outputs.cache-hit != 'true'
@@ -63,10 +64,10 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
 
-      - name: 'Use Node.js 20.x'
+      - name: 'Use Node.js ${{ env.NODE_VERSION }}'
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: 'Restore yarn cache'
         uses: actions/cache@v3
@@ -95,10 +96,10 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
 
-      - name: 'Use Node.js 20.x'
+      - name: 'Use Node.js ${{ env.NODE_VERSION }}'
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: 'Get yarn cache'
         uses: actions/cache@v3
@@ -131,10 +132,10 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
 
-      - name: 'Use Node.js 20.x'
+      - name: 'Use Node.js ${{ env.NODE_VERSION }}'
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: 'Get yarn cache'
         uses: actions/cache@v3
