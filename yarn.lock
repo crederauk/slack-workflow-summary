@@ -1347,10 +1347,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.6.3":
-  version: 20.6.3
-  resolution: "@types/node@npm:20.6.3"
-  checksum: 444a6f1f41cfa8d3e20ce0108e6e43960fb2ae0e481f233bb1c14d6252aa63a92e021de561cd317d9fdb411688f871065f40175a1f18763282dee2613a08f8a3
+"@types/node@npm:^20.11.5":
+  version: 20.11.5
+  resolution: "@types/node@npm:20.11.5"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: a542727de1334ae20a3ca034b0ecf4b464a57ca01efc4f9cf43bd9ab93896125ab3c2de060ecd8f6ae23b86c6bf3463f681b643e69c032c6a662d376c98a6092
   languageName: node
   linkType: hard
 
@@ -6512,7 +6514,7 @@ __metadata:
     "@actions/github": ^6.0.0
     "@slack/webhook": ^7.0.2
     "@types/jest": ^29.5.6
-    "@types/node": ^20.6.3
+    "@types/node": ^20.11.5
     "@typescript-eslint/eslint-plugin": ^6.8.0
     "@typescript-eslint/parser": ^6.18.1
     "@vercel/ncc": ^0.38.1
