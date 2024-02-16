@@ -1,6 +1,6 @@
 {
   "plugins": ["jest", "@typescript-eslint"],
-  "extends": ["plugin:github/typescript"],
+  "extends": ["plugin:github/typescript", "plugin:github/recommended", "plugin:prettier/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 9,
@@ -13,6 +13,9 @@
     "jest/globals": true
   },
   "rules": {
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-unused-vars": "error",
+    "import/no-namespace": ["error", { "ignore": ["@actions/*"] }],
+    "i18n-text/no-en": 0,
+    "filenames/match-regex": [2, "^[a-zA-Z]+(.test)?$", true]
   }
 }

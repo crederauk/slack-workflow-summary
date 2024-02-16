@@ -34173,6 +34173,7 @@ class ActionsClient {
             const response = yield this.octokit.rest.actions.listJobsForWorkflowRun({
                 owner: this.owner,
                 repo: this.repo,
+                // eslint-disable-next-line camelcase
                 run_id: runId,
             });
             return response.data.jobs
@@ -34361,7 +34362,9 @@ class Message {
                 },
                 {
                     type: 'image',
+                    // eslint-disable-next-line camelcase
                     image_url: `https://github.com/${this.summary.initiatedBy}.png?size=40`,
+                    // eslint-disable-next-line camelcase
                     alt_text: `Author's avatar`,
                 },
                 {
@@ -34422,11 +34425,10 @@ class SlackClient {
     }
     sendMessage(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.webhook
-                .send({
+            const response = yield this.webhook.send({
                 attachments: [message.render()],
-            })
-                .then((result) => result.text);
+            });
+            return response.text;
         });
     }
 }

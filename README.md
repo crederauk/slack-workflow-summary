@@ -1,4 +1,7 @@
 # Slack Workflow Summary
+[![Build and test](https://github.com/crederauk/slack-workflow-summary/actions/workflows/test.yml/badge.svg)](https://github.com/crederauk/slack-workflow-summary/actions/workflows/test.yml)
+[![Lint workflows](https://github.com/crederauk/slack-workflow-summary/actions/workflows/actionlint.yml/badge.svg)](https://github.com/crederauk/slack-workflow-summary/actions/workflows/actionlint.yml)
+
 A Github Action to post a Slack message with a summary of the current workflow
 
 ## Inputs
@@ -83,3 +86,7 @@ Including this in the [test workflow] in this repo produces the following messag
 ![Example message](img/message.png)
 
 [test workflow]: .github/workflows/test.yml
+
+## Development
+
+Check out the [docs](./docs/) folder
