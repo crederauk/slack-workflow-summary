@@ -1,3 +1,4 @@
+/* eslint camelcase: 0 */
 import { KnownBlock, MessageAttachment } from '@slack/types';
 import Message from './message';
 import { SummaryEmojis, WorkflowSummary } from './types';

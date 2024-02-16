@@ -101,7 +101,9 @@ export default class Message {
         },
         {
           type: 'image',
+          // eslint-disable-next-line camelcase
           image_url: `https://github.com/${this.summary.initiatedBy}.png?size=40`,
+          // eslint-disable-next-line camelcase
           alt_text: `Author's avatar`,
         },
         {

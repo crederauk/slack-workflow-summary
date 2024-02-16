@@ -1,3 +1,4 @@
+/* eslint camelcase: 0 */
 import * as github from '@actions/github';
 import ActionsClient from './actionsClient';
 import { Job } from './types';
@@ -106,7 +107,6 @@ describe('ActionsClient', () => {
       listJobsForWorkflowRun.mockReturnValue(Promise.resolve({ data: { jobs: jobsToReturn } }));
 
       const jobs = await client.getCompletedJobs(1234);
-      // console.log(jobs)
       expect(jobs).not.toContain(excludedJob);
     });
   });

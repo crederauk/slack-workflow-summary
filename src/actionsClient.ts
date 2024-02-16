@@ -18,6 +18,7 @@ export default class ActionsClient {
     const response = await this.octokit.rest.actions.listJobsForWorkflowRun({
       owner: this.owner,
       repo: this.repo,
+      // eslint-disable-next-line camelcase
       run_id: runId,
     });
     return response.data.jobs

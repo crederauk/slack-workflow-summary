@@ -9,10 +9,9 @@ export default class SlackClient {
   }
 
   async sendMessage(message: Message): Promise<string> {
-    return this.webhook
-      .send({
-        attachments: [message.render()],
-      })
-      .then((result) => result.text);
+    const response = await this.webhook.send({
+      attachments: [message.render()],
+    });
+    return response.text;
   }
 }
