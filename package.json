@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lewis-od/slack-workflow-summary.git"
+    "url": "git+https://github.com/crederauk/slack-workflow-summary.git"
   },
   "keywords": [
     "actions",
@@ -32,8 +32,8 @@
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.16",
-    "@typescript-eslint/eslint-plugin": "^6.8.0",
-    "@typescript-eslint/parser": "^6.18.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
     "@vercel/ncc": "^0.38.1",
     "eslint": "^8.56.0",
     "eslint-plugin-github": "^4.10.1",
